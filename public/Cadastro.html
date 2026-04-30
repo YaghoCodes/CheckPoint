@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles/styleLogin.css">
+    <title>Cadastro</title>
+</head>
+
+<body>
+    <div class="container-main">
+        <h1 class="logo"><span class="texto-azul">Check</span>Point</h1>
+        <h3 class="texto-teste">Entre na <span class="texto-azul">comunidade.</span></h3>
+        <p class="sub-texto">Crie sua conta e organize todos os jogos que você ama em um só lugar.</p>
+
+        <div class="box-cadastro">
+            <form>
+                <label for="ipt_username">Nome de Usuario</label>
+                <input type="text" id="ipt_username" placeholder="Nome de Usuario">
+                <label for="email">EMAIL</label>
+                <input type="email" id="ipt_email" placeholder="voce@email.com">
+                <label for="senha">SENHA</label>
+                <input type="password" id="ipt_senha" placeholder="Mínimo 6 caracteres">
+                <label for="confirmar_senha">CONFIRMAR SENHA</label>
+                <input type="password" id="ipt_confirmar_senha" placeholder="Mínimo 6 caracteres">
+
+                <button type="submit" onclick="realizarCadastro()" class="btn-cadastrar">Criar conta</button>
+
+            </form>
+        </div>
+        <p class="login-link">Já tem uma conta? <a href="Login.html">Entrar</a></p>
+    </div>
+</body>
+
+</html>
+<script src="script.js"></script>
+<script>
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // impede o reload
+    });
+
+    function realizarCadastro() {
+        let usernameVar = ipt_username.value
+        let emailVar = ipt_email.value
+        let senhaVar = ipt_senha.value
+        let senhaConVar = ipt_confirmar_senha.value
+
+        if (
+            usernameVar == "" ||
+            emailVar == "" ||
+            senhaVar == "" ||
+            senhaConVar == ""
+        ) {
+            alert("Algum campo esta vazio.")
+            return false
+        }
+        if (senhaVar !== senhaConVar) {
+            alert("As senhas não estão iguais.")
+            return false
+        }
+
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: usernameVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+            }),
+        })
+    }
+</script>
