@@ -10,7 +10,7 @@
 
 <body>
     <div class="container-main">
-        <h1 class="logo"><span class="texto-azul">Check</span>Point</h1>
+        <h1 class="logo" id="cadastro-logo"><span class="texto-azul">Check</span>Point</h1>
         <h3 class="texto-teste">Entre na <span class="texto-azul">comunidade.</span></h3>
         <p class="sub-texto">Crie sua conta e organize todos os jogos que você ama em um só lugar.</p>
 
@@ -18,29 +18,40 @@
             <form>
                 <label for="ipt_username">Nome de Usuario</label>
                 <input type="text" id="ipt_username" placeholder="Nome de Usuario">
-                <label for="email">EMAIL</label>
+                <label>EMAIL</label>
                 <input type="email" id="ipt_email" placeholder="voce@email.com">
-                <label for="senha">SENHA</label>
-                <input type="password" id="ipt_senha" placeholder="Mínimo 6 caracteres">
+                <label>SENHA</label>
+                <div class="password-container">
+                    <input type="password" id="ipt_senha" placeholder="Mínimo 6 caracteres">
+                    <button type="button" class="toggle-password" onclick="togglePassword('ipt_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
+                </div>
                 <label for="confirmar_senha">CONFIRMAR SENHA</label>
-                <input type="password" id="ipt_confirmar_senha" placeholder="Mínimo 6 caracteres">
+                <div class="password-container">
+                    <input type="password" id="ipt_confirmar_senha" placeholder="Mínimo 6 caracteres">
+                    <button type="button" class="toggle-password" onclick="togglePassword('ipt_confirmar_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
+                </div>
 
-                <button type="submit" onclick="realizarCadastro()" class="btn-cadastrar">Criar conta</button>
+                <button type="button" class="btn-cadastrar" onclick="realizarCadastro()">Criar conta</button>
 
             </form>
         </div>
         <p class="login-link">Já tem uma conta? <a href="Login.html">Entrar</a></p>
     </div>
-</body>
+    <script src="assets/scripts/script.js"></script>
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.parentElement.querySelector('.toggle-password');
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
+            button.innerHTML = input.type === 'password' ? '<img src="assets/images/icone-oculto.png" alt="">' : '<img src="assets/images/icone-visivel.png" alt="">';
+        }
 
-</html>
-<script>
-
-    function realizarCadastro() {
-        let usernameVar = ipt_username.value
-        let emailVar = ipt_email.value
-        let senhaVar = ipt_senha.value
-        let senhaConVar = ipt_confirmar_senha.value
+        function realizarCadastro() {
+            let usernameVar = ipt_username.value;
+            let emailVar = ipt_email.value;
+            let senhaVar = ipt_senha.value;
+            let senhaConVar = ipt_confirmar_senha.value;
 
         if (
             usernameVar == "" ||
@@ -55,36 +66,45 @@
             alert("As senhas não estão iguais.")
             return false
         }
-
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                nomeServer: usernameVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-            }),
-        })
-        .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-            alert("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
-          setTimeout(() => {
-            window.location = "login.html";
-          }, "2000");
-
-        } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+        if(!validarEmail(emailVar)) {
+            alert("O email digitado é inválido.")
+            return false
         }
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });
+        if(!validarSenha(senhaVar)) {
+            alert("A senha deve conter no mínimo 6 caracteres, incluindo letras maiúsculas, minúsculas e números.")
+            return false
+        }
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nomeServer: usernameVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar,
+                }),
+            })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
 
-    return false;
-  }
+                if (resposta.ok) {
+                    alert("Cadastro realizado com sucesso! Redirecionando para tela de Login...");
+                    setTimeout(() => {
+                        window.location = "/login.html";
+                    }, 2000);
 
-</script>
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+            return false;
+        }
+    </script>
+</body>
+
+</html>

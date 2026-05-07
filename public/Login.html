@@ -15,18 +15,90 @@
         <p class="sub-texto">Acesse sua biblioteca, suas listas e continue de onde parou.</p>
 
         <div class="box-cadastro">
-            <form>
+            <form onsubmit="return entrar()">
                 <label for="email">EMAIL</label>
-                <input type="email" id="email" placeholder="voce@email.com">
+                <input type="email" id="email_input" placeholder="voce@email.com">
                 <label for="senha">SENHA</label>
-                <input type="password" id="senha" placeholder="Mínimo 6 caracteres">
+                <div class="password-container">
+                    <input type="password" id="senha_input" placeholder="Mínimo 6 caracteres">
+                    <button type="button" class="toggle-password" onclick="togglePassword('senha_input')"><img src="assets/images/icone-oculto.png" alt=""> </button>
+                </div>
 
-                <button type="submit" class="btn-cadastrar">Criar conta</button>
+                <button type="submit" class="btn-cadastrar">Logar</button>
 
             </form>
         </div>
         <p class="login-link" id="cadastrar-link">Ainda não tem conta? <a href="cadastro.html">Criar conta</a></p>
     </div>
+    <script src="assets/scripts/script.js"></script>
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.parentElement.querySelector('.toggle-password');
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
+            button.innerHTML = input.type === 'password' ? '<img src="assets/images/icone-oculto.png" alt="">' : '<img src="assets/images/icone-visivel.png" alt="">';
+        }
+
+        function entrar() {
+            var emailVar = email_input.value;
+            var senhaVar = senha_input.value;
+
+            if (emailVar == "" || senhaVar == "") {
+                alert("Preencha todos os campos para prosseguir!");
+                return false;
+            }
+
+            console.log("FORM LOGIN: ", emailVar);
+            console.log("FORM SENHA: ", senhaVar);
+
+            if(!validarEmail(emailVar)) {
+                alert("O email digitado é inválido.")
+                return false
+            }
+
+            if(!validarSenha(senhaVar)) {
+                alert("A senha deve conter no mínimo 6 caracteres, incluindo letras maiúsculas, minúsculas e números.")
+                return false
+            }
+
+            fetch("/usuarios/autenticar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    emailServer: emailVar,
+                    senhaServer: senhaVar
+                })
+            }).then(function (resposta) {
+                console.log("ESTOU NO THEN DO entrar()!")
+
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        sessionStorage.EMAIL_USUARIO = json.email;
+                        sessionStorage.NOME_USUARIO = json.username;
+                        sessionStorage.ID_USUARIO = json.id_usuario;
+
+                        setTimeout(function () {
+                            window.location = "/home.html";
+                        }, 3000);
+
+                    });
+                } else {
+                    console.log("Houve um erro ao tentar realizar o login!");
+                    resposta.text().then(texto => {
+                        console.error(texto);
+                    });
+                }
+            }).catch(function (erro) {
+                console.log(erro);
+            });
+
+            return false;
+        }
+    </script>
 </body>
 
 </html>
