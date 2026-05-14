@@ -4,38 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles/styleHome.css">
+    <link rel="stylesheet" href="assets/styles/stylePerfil.css">
     <title>Perfil</title>
 </head>
 
 <body>
-  <header>
-    <div class="header-inner">
-        <h1><span class="texto-azul">Check</span>Point</h1>
-        <ul class="icones_nav">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-        </ul>
-        <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
-            <div class="profile-avatar" id="c_usuario">U</div>
-            <span class="profile-name" id="n_usuario">username</span>
-        </a>
-    </div>
-</header>
+    <header>
+        <div class="header-inner">
+            <h1><span class="texto-azul">Check</span>Point</h1>
+            <ul class="icones_nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>
+        </div>
+    </header>
     <div class="container-main">
         <div class="hero">
-            <div class="hero-welcome">// BEM-VINDO DE VOLTA</div>
-            <div class="hero-resume">
-                <h1>Olá, <span id="w_usuario" class="texto-azul"></span></h1>
-                <p>Um resumo rápido pra você começar. Visite seu catálogo, dashboard ou perfil pra mais detalhes.</p>
+            <div class="profile-avatar-hero" id="profile-avatar">U</div>
+            <div class="wrapper-hero">
+                <div class="hero-welcome">
+                    // PERFIL
+                </div>
+                <div class="hero-resume">
+                    <h1>@<span id="w_usuario"></span></h1>
+                    <p id="desc_usuario">descrição teste e placeholder adcionar texto para teste caramba vai vai vai vai
+                        vai aaaaa aaaaaaaaaa aaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa
+                        aaaaaaaaaaaaaaaa aa</p>
+                        <div class="hero-infos">
+                            <span class="email-hero" id="email_usuario">emailteste@gmail.com</span>
+                            <span class="date-hero" id="date_usuario">Membro desde 2026</span>
+                        </div>
+                </div>
             </div>
-            <div class="hero-buttons">
-                <button id="catalogo"><a href="catalogo.html">Ver Catalogo</a></button>
-                <button><a href="dashboard.html">Meu Dashboard</a></button>
-                <button><a href="perfil.html">Perfil</a></button>
-            </div>
+
         </div>
+        
         <div class="home-main">
             <div class="left-col">
                 <div class="playing-now">
@@ -149,7 +157,7 @@
     <script>
         validarSessao();
 
-        
+
     </script>
 </body>
 

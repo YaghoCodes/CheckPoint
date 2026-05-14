@@ -103,6 +103,21 @@ header h1 {
     flex-shrink: 0;
 }
 
+.profile-avatar-hero{
+    width: 100px;
+    height: 100px;
+    border-radius: 20%;
+    background: rgba(74, 158, 219, 0.15);
+    border: 1px solid rgba(74, 158, 219, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #4A9EDB;
+    margin-right: 30px;
+}
+
 .profile-name {
     font-size: 16px;
     font-weight: 600;
@@ -124,18 +139,23 @@ header h1 {
     height: 25vh;
     padding-top: 3vh;
     color: rgba(122, 122, 122, 0.9);
+    display: flex;
+    flex-direction: row;
 }
 
 .hero-welcome {
     letter-spacing: 2px;
-    margin-bottom: 2vh;
-    font-size: 1.1rem;
+    margin-bottom: 1vh;
+    font-size: 0.9rem;
+    color: #4A9EDB;
 }
 
 .hero-resume {
     color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     font-size: 1.05rem;
+    max-width: 600px;
+
 }
 
 .hero-resume h1 {
@@ -145,42 +165,34 @@ header h1 {
 .hero-resume p {
     font-size: 1rem;
     letter-spacing: 0px;
-    margin-bottom: 2.5vh;
-    color: rgba(227, 227, 227, 0.7);
+    margin-bottom: 1.6vh;
+    color: rgba(227, 227, 227, 0.537);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3rem; /* Limita a altura para 3 linhas */
 }
 
-.hero-buttons button {
-    font-size: 0.85rem;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.60);
-    border: 1px solid rgba(231, 231, 231, 0.1);
-    border-radius: 7px;
-    padding: 10px 25px;
+.email-hero {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.296);
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
     margin-right: 10px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
 }
 
-.hero-buttons button:hover {
-    border-color: rgba(231, 231, 231, 0.2);
-    color: rgba(255, 255, 255, 0.80);
+.date-hero {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.296);
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
 }
 
-.hero-buttons button a {
-    color: inherit;
-    text-decoration: none;
+.wrapper-hero{
+    display: flex;
+    flex-direction: column;
 }
 
-#catalogo {
-    color: #0d1117;
-    background-color: #4A9EDB;
-    font-weight: 600;
-    transition: background-color 0.2s;
-}
-
-#catalogo:hover {
-    background-color: rgb(69, 141, 189);
-}
+/* Main */
 
 .home-main {
     width: 100%;
