@@ -1,11 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=], initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles/styleNavbar.css">
+    <link rel="stylesheet" href="assets/styles/styleDashboard.css">
+    <title>CheckPoint — Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 <body>
-    DASHBOARDS
+
+    <header>
+        <div class="header-inner">
+            <h1><span class="texto-azul">Check</span>Point</h1>
+            <ul class="icones_nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            </ul>
+            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>
+        </div>
+    </header>
+
+
+    <div class="dashboard-hero">
+        <div class="hero-inner">
+            <div class="hero-label">// dashboard</div>
+            <h2>Suas <span class="texto-azul">estatísticas.</span></h2>
+            <p>Um panorama de tudo que você já jogou e escreveu por aqui.</p>
+
+            <div class="row-stats">
+                <div class="box-stats">
+                    <h1 id="dash_jogados">42</h1>
+                    <p>Jogos jogados</p>
+                </div>
+                <div class="box-stats">
+                    <h1 id="dash_reviews">18</h1>
+                    <p>Reviews escritas</p>
+                </div>
+                <div class="box-stats">
+                    <h1 id="dash_semana">8</h1>
+                    <p>Reviews esta semana</p>
+                </div>
+                <div class="box-stats">
+                    <h1 id="dash_lista">23</h1>
+                    <p>Na lista pra jogar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <div class="container-main">
+
+        <!-- GRÁFICOS -->
+        <div class="charts-row">
+
+            <div class="chart-card large">
+                <div class="chart-title">Reviews nos ultimos 7 dias</div>
+                <div class="chart-subtitle" id="total-reviews-label">Total: 8 reviews</div>
+                <div class="chart-wrap">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card small">
+                <div class="chart-title">Distribuição por gênero</div>
+                <div class="chart-subtitle">Dos seus jogos jogados</div>
+                <div class="chart-wrap">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <div class="donut-legend" id="donut-legend"></div>
+            </div>
+
+        </div>
+
+    
+    </div>
+
+    <script src="assets/scripts/sessao.js"></script>
+    <script>
+        validarSessaoCatalogo();
+
+        const barCtx = document.getElementById("barChart").getContext("2d");
+        const barData = {
+            labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+            values: [0, 1, 2, 1, 3, 0, 1]
+        };
+
+        document.getElementById("total-reviews-label").textContent =
+            `Total: ${barData.values.reduce((a, b) => a + b, 0)} reviews`;
+
+        new Chart(barCtx, {
+            type: "bar",
+            data: {
+                labels: barData.labels,
+                datasets: [{
+                    data: barData.values,
+                    backgroundColor: "rgba(74, 158, 219, 0.25)",
+                    borderColor: "rgba(74, 158, 219, 0.6)",
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        ticks: { color: "rgba(255,255,255,0.3)", font: { size: 11 } },
+                        grid: { color: "rgba(255,255,255,0.04)" }
+                    },
+                    y: {
+                        ticks: { color: "rgba(255,255,255,0.3)", font: { size: 11 }, stepSize: 1 },
+                        grid: { color: "rgba(255,255,255,0.04)" },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const donutCtx = document.getElementById("donutChart").getContext("2d");
+        const generos = [
+            { label: "RPG", value: 10, color: "#3b82f6" },
+            { label: "Indie", value: 8, color: "#6b7280" },
+            { label: "Soulslike", value: 7, color: "#60a5fa" },
+            { label: "Puzzle", value: 5, color: "#93c5fd" },
+            { label: "Outros", value: 12, color: "#374151" },
+        ];
+
+        new Chart(donutCtx, {
+            type: "doughnut",
+            data: {
+                labels: generos.map(g => g.label),
+                datasets: [{
+                    data: generos.map(g => g.value),
+                    backgroundColor: generos.map(g => g.color),
+                    borderColor: "#161b22",
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: { legend: { display: false } }
+            }
+        });
+
+
+        const legend = document.getElementById("donut-legend");
+        legend.innerHTML = generos.map(g => `
+            <div class="legend-item">
+                <div class="legend-dot" style="background:${g.color}"></div>
+                ${g.label}
+            </div>
+        `).join("");
+    </script>
+
 </body>
+
 </html>

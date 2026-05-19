@@ -18,115 +18,6 @@ html, body {
     scroll-behavior: smooth;
 }
 
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(13, 17, 23, 0.7);
-    border-bottom: 1px solid rgba(122, 122, 122, 0.3);
-    height: 80px;
-    position: fixed;
-    z-index: 1000;
-    backdrop-filter: blur(30px);
-    width: 100%;
-}
-
-.header-inner {
-    display: flex;
-    align-items: center;
-    width: 70%;
-}
-
-header h1 {
-    color: #fff;
-    font-size: 24px;
-    margin-right: 22rem;
-}
-
-.icones_nav {
-    display: flex;
-    list-style: none;
-    flex-direction: row;
-    gap: 20px;
-    font-size: 16px;
-    font-weight: 600;
-    justify-content: center;
-    margin-right: auto;
-}
-
-.profile-btn {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 8px;
-    transition: background 0.15s;
-    text-decoration: none;
-    max-width: 200px;
-}
-
-.icones_nav li a {
-    color: rgba(122, 122, 122, 0.9);
-    text-decoration: none;
-}
-
-.icones_nav li .active {
-    color: rgba(188, 188, 188, 0.9);
-    font-weight: 600;
-}
-
-.icones_nav li a:hover {
-    color: rgba(188, 188, 188, 0.9);
-}
-
-.profile-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(74, 158, 219, 0.15);
-    border: 1px solid rgba(74, 158, 219, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: #4A9EDB;
-    flex-shrink: 0;
-}
-
-.profile-avatar-hero{
-    width: 100px;
-    height: 100px;
-    border-radius: 20%;
-    background: rgba(74, 158, 219, 0.15);
-    border: 1px solid rgba(74, 158, 219, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    font-weight: 700;
-    color: #4A9EDB;
-    margin-right: 30px;
-}
-
-.profile-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .container-main {
     margin: 0 auto;
     max-width: 70%;
@@ -150,6 +41,21 @@ header h1 {
     color: #4A9EDB;
 }
 
+.profile-avatar-hero{
+    width: 100px;
+    height: 100px;
+    border-radius: 20%;
+    background: rgba(74, 158, 219, 0.15);
+    border: 1px solid rgba(74, 158, 219, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #4A9EDB;
+    margin-right: 30px;
+}
+
 .hero-resume {
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 1.2px;
@@ -169,7 +75,7 @@ header h1 {
     color: rgba(227, 227, 227, 0.537);
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3rem; /* Limita a altura para 3 linhas */
+    max-height: 3rem; 
 }
 
 .email-hero {
@@ -284,6 +190,62 @@ header h1 {
 .playing-btn:hover {
     border-color: rgba(255, 255, 255, 0.2);
     color: rgba(255, 255, 255, 0.8);
+}
+
+.destaques{
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.destaque-main{
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.destaque-box{
+    background-color: #161b22;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1.25rem;
+    padding-top: 0.5rem;
+    width: 48%;
+}
+
+.destaque-header {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+
+.destaque-box-header {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(139, 139, 139, 0.85);
+    margin-bottom: 0.5rem;
+}
+
+.destaque-box-cover {
+    width: 100%;
+    height:100px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #3b1fa3, #7c3aed);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    align-items: flex-end;
+    justify-content: left;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.781);
+    margin-bottom: 0.5rem;
+    padding: 4%;
+    font-weight: 600;
+}
+
+.destaque-box-desc {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.4;
 }
 
 .community-reviews {

@@ -5,24 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/styleHome.css">
-    <title>Perfil</title>
+    <link rel="stylesheet" href="assets/styles/styleNavbar.css">
+    <title>Home</title>
 </head>
 
 <body>
-  <header>
-    <div class="header-inner">
-        <h1><span class="texto-azul">Check</span>Point</h1>
-        <ul class="icones_nav">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-        </ul>
-        <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
-            <div class="profile-avatar" id="c_usuario">U</div>
-            <span class="profile-name" id="n_usuario">username</span>
-        </a>
-    </div>
-</header>
+    <header>
+        <div class="header-inner">
+            <h1><span class="texto-azul">Check</span>Point</h1>
+            <ul class="icones_nav">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>
+        </div>
+    </header>
     <div class="container-main">
         <div class="hero">
             <div class="hero-welcome">// BEM-VINDO DE VOLTA</div>
@@ -43,7 +44,6 @@
                     <div class="playing-card">
                         <div class="game-cover">COVER</div>
                         <div class="playing-info">
-                            <span class="playing-badge">jogando</span>
                             <h2 class="playing-name" id="jogandoNome">Hollow Knight: Silksong</h2>
                             <p class="playing-meta">Adicionado há <span id="date-meta">2</span> dias · Metroidvania</p>
                         </div>
@@ -114,31 +114,38 @@
                 </div>
             </div>
             <div class="right-col">
-                <div class="quick-stats">
-                    <h1>Status Rapido</h1>
-                    <div class="row-stats">
-                        <div class="box-stats">
-                            <h1>22</h1>
-                            <p>Jogados</p>
-                        </div>
-                        <div class="box-stats">
-                            <h1>55</h1>
-                            <p>Reviews</p>
-                        </div>
-                    </div>
-                    <div class="row-stats">
-                        <div class="box-stats">
-                            <h1>23</h1>
-                            <p>Na Lista</p>
-                        </div>
-                        <div class="box-stats">
-                            <h1>1</h1>
-                            <p>Esta Semana</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="to-play">
 
+                    <div class="to-play-card">
+                        <div class="to-play-header">
+                            <h1>Na fila para jogar</h1>
+                        </div>
+                        <div class="to-play-box">
+                            <div class="to-play-header" id="tp-header1">
+                                Outer Wilds
+                            </div>
+                            <div class="to-play-genre">Aventura</div>
+                        </div>
+                        <div class="to-play-box">
+                            <div class="to-play-header" id="tp-header2">
+                                Disco Elysium
+                            </div>
+                            <div class="to-play-genre">RPG</div>
+                        </div>
+                        <div class="to-play-box">
+                            <div class="to-play-header" id="tp-header3">
+                                Sea of Stars
+                            </div>
+                            <div class="to-play-genre">RPG</div>
+                        </div>
+                        <div class="to-play-box">
+                            <div class="to-play-header" id="tp-header4">
+                                Elden Ring
+                            </div>
+                            <div class="to-play-genre">Soulslike</div>
+                        </div>
+                        <div class="to-play-fulllist">ver lista completa</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -147,9 +154,9 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
-        validarSessao();
+        validarSessaoHome();
 
-        
+
     </script>
 </body>
 

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/stylePerfil.css">
+    <link rel="stylesheet" href="assets/styles/styleNavbar.css">
     <title>Perfil</title>
 </head>
 
@@ -51,7 +52,6 @@
                     <div class="playing-card">
                         <div class="game-cover">COVER</div>
                         <div class="playing-info">
-                            <span class="playing-badge">jogando</span>
                             <h2 class="playing-name" id="jogandoNome">Hollow Knight: Silksong</h2>
                             <p class="playing-meta">Adicionado há <span id="date-meta">2</span> dias · Metroidvania</p>
                         </div>
@@ -59,17 +59,17 @@
                     </div>
                 </div>
                 <div class="destaques">
-                    <div class="destaque-header"></div>
+                    <div class="destaque-header">Destaques</div>
                     <div class="destaque-main">
                         <div class="destaque-box">
-                            <div class="destaque-box-header"></div>
-                            <div class="destaque-box-cover"></div>
-                            <div class="destque-box-desc"></div>
+                            <div class="destaque-box-header">Genero Favorito</div>
+                            <div class="destaque-box-cover" id="genero_favorito">Ação</div>
+                            <div class="destaque-box-desc">A categoria de jogos que mais aparece na sua biblioteca</div>
                         </div>
                         <div class="destaque-box">
-                            <div class="destaque-box-header"></div>
-                            <div class="destaque-box-cover"></div>
-                            <div class="destque-box-desc"></div>
+                            <div class="destaque-box-header">Plataforma Preferida</div>
+                            <div class="destaque-box-cover" id="plataforma_preferida">Pc / Steam</div>
+                            <div class="destaque-box-desc">Onde você passa a maior parte do seu tempo de jogo.</div>
                         </div>
                     </div>
                 </div>
@@ -157,9 +157,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="to-play">
-
-                </div>
             </div>
         </div>
     </div>
@@ -167,7 +164,7 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
-        validarSessao();
+        validarSessaoPerfil();
 
     </script>
 </body>

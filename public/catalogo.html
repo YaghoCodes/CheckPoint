@@ -1,11 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="assets/styles/styleCatalogo.css">
+    <link rel="stylesheet" href="assets/styles/styleNavbar.css">
+    <title>CheckPoint — Catálogo</title>
+    <style>
+
+    </style>
 </head>
+
 <body>
-    CATALOGOOOOOOOOOOOOOOOO
+
+    <header>
+        <div class="header-inner">
+            <h1><span class="texto-azul">Check</span>Point</h1>
+            <ul class="icones_nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="catalogo.html" class="active">Catálogo</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="catalogo-hero">
+        <div class="catalogo-hero-wrapper">
+            <div class="hero-label">// CATÁLOGO</div>
+            <h2>Explore a biblioteca de <span class="texto-azul">jogos.</span></h2>
+            <p>Clique em um jogo para ver detalhes e deixar sua review.</p>
+            <div class="catalogo-controls">
+                <input class="search-input" type="text" placeholder="Buscar jogos ou categorias..." id="busca"
+                    oninput="filtrar()">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-main">
+        <div class="catalogo-grid" id="catalogo-grid"></div>
+    </div>
+
+    <script src="assets/scripts/sessao.js"></script>
+    <script>
+        validarSessaoCatalogo()
+        const jogos = [
+            { nome: "The Legend of Zelda: Breath of the Wild", genero: "Aventura" },
+            { nome: "Baldur's Gate 3", genero: "RPG" },
+            { nome: "Devil May Cry 5", genero: "Ação" },
+            { nome: "Minecraft", genero: "Sandbox" },
+            { nome: "Hollow Knight: Silksong", genero: "Metroidvania" },
+            { nome: "Hades", genero: "Roguelike" },
+            { nome: "The Sims 4", genero: "Simulação" },
+            { nome: "DOOM Eternal", genero: "FPS" },
+            { nome: "Celeste", genero: "Plataforma" },
+            { nome: "Among Us", genero: "Social" },
+            { nome: "Fortnite", genero: "Battle Royale" },
+            { nome: "League of Legends", genero: "MOBA" },
+            { nome: "Resident Evil 4", genero: "Survival Horror" },
+            { nome: "Subnautica", genero: "Survival" },
+            { nome: "Cocoon", genero: "Puzzle" },
+            { nome: "It Takes Two", genero: "Cooperativo" },
+            { nome: "EA Sports FC 25", genero: "Esporte" },
+            { nome: "Street Fighter 6", genero: "Luta" },
+        ];
+
+        const MAX_JOGOS = 25;
+
+        function coverClass(genero) {
+            const mapa = {
+                "Aventura": "cover-aventura",
+                "RPG": "cover-rpg",
+                "Ação": "cover-acao",
+                "Sandbox": "cover-sandbox",
+                "Metroidvania": "cover-metroidvania",
+                "Roguelike": "cover-roguelike",
+                "Simulação": "cover-simulacao",
+                "FPS": "cover-fps",
+                "Plataforma": "cover-plataforma",
+                "Social": "cover-social",
+                "Battle Royale": "cover-battle-royale",
+                "MOBA": "cover-moba",
+                "Survival Horror": "cover-survival-horror",
+                "Survival": "cover-survival",
+                "Puzzle": "cover-puzzle",
+                "Cooperativo": "cover-cooperativo",
+                "Esporte": "cover-esporte",
+                "Luta": "cover-luta",
+            };
+            return mapa[genero] || "cover-puzzle";
+        }
+
+        function renderizar() {
+            const busca = document.getElementById("busca").value.toLowerCase();
+            const grid = document.getElementById("catalogo-grid");
+
+            const filtrados = jogos
+                .slice(0, MAX_JOGOS)
+                .filter(j => j.nome.toLowerCase().includes(busca) || j.genero.toLowerCase().includes(busca));
+
+
+            if (filtrados.length === 0) {
+                grid.innerHTML = `<div class="empty-state">Nenhum jogo encontrado.</div>`;
+                return;
+            }
+            // fazer com que cada card leve pra uma pagina do jogo especifico colocando um link
+            grid.innerHTML = filtrados.map(j => `
+   <a href="detalhes.html" class="game-card">
+    <div class="game-card-cover ${coverClass(j.genero)}"></div>
+
+    <div class="game-card-info">
+        <div class="game-card-name">${j.nome}</div>
+        <div class="game-card-genre">${j.genero}</div>
+    </div>
+</a>`
+            ).join("");
+        }
+
+        function filtrar() {
+            renderizar();
+        }
+
+        renderizar();
+    </script>
 </body>
+
 </html>

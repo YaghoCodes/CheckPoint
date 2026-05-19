@@ -37,7 +37,7 @@ CREATE TABLE avaliacao (
   CONSTRAINT chk_nota CHECK (nota BETWEEN 0 AND 10)
 );
 
-INSERT INTO jogos (nome, categoria, description, lancamento, developer) VALUES
+INSERT INTO jogo (nome, categoria, description, lancamento, developer) VALUES
 ('The Legend of Zelda: Breath of the Wild', 'Aventura', 'Explore um vasto mundo aberto em Hyrule repleto de segredos, dungeons e inimigos desafiadores. Link deve recuperar suas memórias e derrotar Ganon para salvar o reino.', '2017-03-03', 'Nintendo'),
 ('The Witcher 3: Wild Hunt', 'RPG', 'Um épico RPG de mundo aberto onde Geralt de Rívia busca sua filha adotiva Ciri enquanto enfrenta escolhas morais complexas, criaturas perigosas e facções políticas em conflito.', '2015-05-19', 'CD Projekt Red'),
 ('Red Dead Redemption 2', 'Ação', 'Acompanhe Arthur Morgan, um fora-da-lei do velho oeste americano, enquanto navega pela lealdade, honra e sobrevivência em um mundo em declínio para a era moderna.', '2018-10-26', 'Rockstar Games'),
@@ -93,3 +93,8 @@ INSERT INTO jogos (nome, categoria, description, lancamento, developer) VALUES
 ('FIFA 23', 'Esporte', 'A última edição da série FIFA traz times licenciados, jogadores reais e modos como Ultimate Team e Carreira. Com física aprimorada e hipermotion2, oferece a simulação de futebol mais realista da franquia.', '2022-09-30', 'EA Sports'),
 ('Street Fighter 6', 'Luta', 'O melhor capítulo da série com novos personagens, mecânica de Drive System e modo World Tour. Oferece profundidade competitiva para jogadores avançados e acessibilidade para iniciantes com controles modernos simplificados.', '2023-06-02', 'Capcom'),
 ('Mortal Kombat 1', 'Luta', 'Liu Kang recria o universo do zero em um novo Mortal Kombat brutal e violento. Com sistema de Kameos, gráficos impressionantes e história envolvente, redefine o futuro da icônica franquia de luta.', '2023-09-19', 'NetherRealm Studios');
+
+select * from usuario;
+
+select categoria from jogo
+group by categoria;
