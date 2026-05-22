@@ -34,8 +34,9 @@ html, body {
 
 .hero-welcome {
     letter-spacing: 2px;
-    margin-bottom: 2vh;
     font-size: 1.1rem;
+    margin-bottom: 2vh;
+
 }
 
 .hero-resume {

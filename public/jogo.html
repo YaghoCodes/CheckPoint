@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/styles/styleNavbar.css">
+    <link rel="stylesheet" href="assets/styles/styleJogo.css">
+    <title>CheckPoint — Jogo</title>
+   
+</head>
+
+<body>
+
+    <header>
+        <div class="header-inner">
+            <h1><span class="texto-azul">Check</span>Point</h1>
+            <ul class="icones_nav">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="catalogo.html" class="active">Catálogo</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+            <a class="profile-btn" href="perfil.html">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>
+        </div>
+    </header>
+
+
+
+    <div class="container-main">
+
+
+        <div class="jogo-hero">
+
+ 
+            <div class="jogo-left">
+                <div class="jogo-capa">
+
+                    <div class="jogo-capa-placeholder" id="jogo-capa-placeholder">CAPA</div>
+                </div>
+                <button class="btn-acao btn-jogado" id="btn-jogado" onclick="marcarJogado()">
+                    ✓ Marcar como jogado
+                </button>
+                <button class="btn-acao btn-lista" id="btn-lista" onclick="adicionarLista()">
+                    + Adicionar à lista
+                </button>
+            </div>
+
+
+            <div class="jogo-right">
+                <div class="jogo-label" id="jogo-estudio">// Estúdio Independente</div>
+                <h1 class="jogo-nome" id="jogo-nome">Nome do Jogo</h1>
+                <div class="jogo-meta">
+                    <span class="jogo-meta-item">ano<span id="jogo-ano">2024</span></span>
+                    <span class="jogo-meta-item">cate<span id="jogo-genero">Categoria</span></span>
+                    <span class="jogo-nota-badge">rating<span id="jogo-nota-media">4.6</span></span>
+                </div>
+                <p class="jogo-descricao" id="jogo-descricao">
+                    Descrição do jogo aparece aqui. Substitua pelo conteúdo vindo do backend.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Sua review</div>
+
+            <div class="stars-input" id="stars-input">
+                <button class="star-btn" data-valor="1" onclick="selecionarEstrela(1)">☆</button>
+                <button class="star-btn" data-valor="2" onclick="selecionarEstrela(2)">☆</button>
+                <button class="star-btn" data-valor="3" onclick="selecionarEstrela(3)">☆</button>
+                <button class="star-btn" data-valor="4" onclick="selecionarEstrela(4)">☆</button>
+                <button class="star-btn" data-valor="5" onclick="selecionarEstrela(5)">☆</button>
+            </div>
+
+            <textarea class="review-textarea" id="review-texto" placeholder="O que você achou desse jogo?"></textarea>
+
+            <button class="btn-publicar" onclick="publicarReview()">Publicar review</button>
+        </div>
+
+        <!-- REVIEWS DA COMUNIDADE -->
+        <div class="section-card">
+            <div class="section-title">Reviews da comunidade</div>
+
+            <div id="reviews-lista">
+                <div class="community-review-card">
+                    <div class="community-review-top">
+                        <span class="community-review-user">@ana</span>
+                        <span class="community-review-nota">★ 5</span>
+                    </div>
+                    <p class="community-review-text">Obra-prima. Cada detalhe importa.</p>
+                </div>
+                <div class="community-review-card">
+                    <div class="community-review-top">
+                        <span class="community-review-user">@lucas</span>
+                        <span class="community-review-nota">★ 4</span>
+                    </div>
+                    <p class="community-review-text">Ótimo, mas o ritmo cai no meio.</p>
+                </div>
+                <div class="community-review-card">
+                    <div class="community-review-top">
+                        <span class="community-review-user">@marina</span>
+                        <span class="community-review-nota">★ 5</span>
+                    </div>
+                    <p class="community-review-text">Não consigo parar de pensar nesse jogo.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="assets/scripts/sessao.js"></script>
+    <script>
+        validarSessaoCatalogo();
+        const params = new URLSearchParams(window.location.search);
+
+        const id = params.get("id");
+
+        console.log(id);
+        var notaSelecionada = 0;
+
+        function selecionarEstrela(valor) {
+            notaSelecionada = valor;
+            document.querySelectorAll(".star-btn").forEach(btn => {
+                const v = parseInt(btn.dataset.valor);
+                btn.textContent = v <= valor ? "★" : "☆";
+                btn.classList.toggle("ativa", v <= valor);
+            });
+        }
+
+        function marcarJogado() {
+            const btn = document.getElementById("btn-jogado");
+            const marcado = btn.dataset.marcado === "true";
+            btn.dataset.marcado = !marcado;
+            btn.textContent = marcado ? "✓ Marcar como jogado" : "✓ Jogado";
+            btn.style.borderColor = marcado ? "" : "rgba(52, 199, 89, 0.4)";
+            btn.style.color = marcado ? "" : "#34c759";
+            // integrar com backend aqui
+        }
+
+        function adicionarLista() {
+            const btn = document.getElementById("btn-lista");
+            const adicionado = btn.dataset.adicionado === "true";
+            btn.dataset.adicionado = !adicionado;
+            btn.textContent = adicionado ? "+ Adicionar à lista" : "✓ Na lista";
+            btn.style.borderColor = adicionado ? "" : "rgba(74, 158, 219, 0.4)";
+            btn.style.color = adicionado ? "" : "#4A9EDB";
+            // integrar com backend aqui
+        }
+
+        function publicarReview() {
+            const texto = document.getElementById("review-texto").value.trim();
+            if (!notaSelecionada) return alert("Selecione uma nota antes de publicar.");
+            if (!texto) return alert("Escreva algo na sua review.");
+            // integrar com backend aqui
+            console.log({ nota: notaSelecionada, texto });
+        }
+    </script>
+
+</body>
+</html>

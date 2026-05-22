@@ -21,7 +21,7 @@
                 <label for="senha">SENHA</label>
                 <div class="password-container">
                     <input type="password" id="senha_input" placeholder="Mínimo 6 caracteres">
-                    <button type="button" class="toggle-password" onclick="togglePassword('senha_input')"><img src="assets/images/icone-oculto.png" alt=""> </button>
+                    <button type="button" class="toggle-password" onclick="MostrarSenha('senha_input')"><img src="assets/images/icone-oculto.png" alt=""> </button>
                 </div>
 
                 <button type="submit" class="btn-cadastrar">Logar</button>
@@ -32,7 +32,7 @@
     </div>
     <script src="assets/scripts/script.js"></script>
     <script>
-        function togglePassword(inputId) {
+        function MostrarSenha(inputId) {
             const input = document.getElementById(inputId);
             const button = input.parentElement.querySelector('.toggle-password');
             const type = input.type === 'password' ? 'text' : 'password';
@@ -80,7 +80,7 @@
                         sessionStorage.EMAIL_USUARIO = json.email;
                         sessionStorage.NOME_USUARIO = json.username;
                         sessionStorage.ID_USUARIO = json.id_usuario;
-
+                        alert("Login realizado com sucesso!");
                         setTimeout(function () {
                             window.location = "/home.html";
                         }, 3000);

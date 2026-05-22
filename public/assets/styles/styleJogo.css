@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Space Grotesk", sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    background-color: #0d1117;
+    scroll-behavior: smooth;
+}
+
+.texto-azul {
+    color: #4A9EDB;
+}
+
+
+
+.container-main {
+    max-width: 70%;
+    margin: 0 auto;
+    padding-top: 160px;
+    padding-bottom: 4rem;
+}
+
+
+.jogo-hero {
+    display: flex;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.jogo-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.jogo-capa {
+    width: 200px;
+    height: 260px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+    background-color: #161b22;
+}
+
+.jogo-capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.jogo-capa-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e2a3a, #263347);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-acao {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: "Space Grotesk", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-jogado {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-jogado:hover {
+    border-color: rgba(52, 199, 89, 0.4);
+    color: #34c759;
+    background: rgba(52, 199, 89, 0.06);
+}
+
+.btn-lista {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-lista:hover {
+    border-color: rgba(74, 158, 219, 0.4);
+    color: #4A9EDB;
+    background: rgba(74, 158, 219, 0.06);
+}
+
+.jogo-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.jogo-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #4A9EDB;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.jogo-nome {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.15;
+}
+
+.jogo-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.jogo-meta-item {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.jogo-nota-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f0b429;
+    background: rgba(240, 180, 41, 0.1);
+    border: 1px solid rgba(240, 180, 41, 0.2);
+    border-radius: 99px;
+    padding: 3px 10px;
+}
+
+.jogo-descricao {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.7;
+    max-width: 580px;
+}
+
+.section-card {
+    background-color: #161b22;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1rem;
+}
+
+/* ESTRELAS */
+.stars-input {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+}
+
+.star-btn {
+    font-size: 22px;
+    color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: color 0.15s, transform 0.1s;
+    line-height: 1;
+}
+
+.star-btn:hover,
+.star-btn.ativa {
+    color: #f0b429;
+}
+
+.star-btn:active {
+    transform: scale(0.9);
+}
+
+/* TEXTAREA */
+.review-textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    font-family: "Space Grotesk", sans-serif;
+    transition: border-color 0.2s;
+    margin-bottom: 1rem;
+}
+
+.review-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.review-textarea:focus {
+    border-color: rgba(74, 158, 219, 0.35);
+}
+
+.btn-publicar {
+    background-color: #4A9EDB;
+    color: #0d1117;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "Space Grotesk", sans-serif;
+    transition: opacity 0.2s;
+}
+
+.btn-publicar:hover {
+    opacity: 0.85;
+}
+
+/* REVIEWS DA COMUNIDADE */
+.community-review-card {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.community-review-card:first-child {
+    padding-top: 0;
+}
+
+.community-review-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.community-review-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.community-review-user {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.community-review-nota {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f0b429;
+    background: rgba(240, 180, 41, 0.1);
+    border-radius: 99px;
+    padding: 3px 10px;
+}
+
+.community-review-text {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+}

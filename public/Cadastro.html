@@ -23,12 +23,12 @@
                 <label>SENHA</label>
                 <div class="password-container">
                     <input type="password" id="ipt_senha" placeholder="Mínimo 6 caracteres">
-                    <button type="button" class="toggle-password" onclick="togglePassword('ipt_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
+                    <button type="button" class="toggle-password" onclick="MostrarSenha('ipt_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
                 </div>
                 <label for="confirmar_senha">CONFIRMAR SENHA</label>
                 <div class="password-container">
                     <input type="password" id="ipt_confirmar_senha" placeholder="Mínimo 6 caracteres">
-                    <button type="button" class="toggle-password" onclick="togglePassword('ipt_confirmar_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
+                    <button type="button" class="toggle-password" onclick="MostrarSenha('ipt_confirmar_senha')"><img src="assets/images/icone-oculto.png" alt=""></button>
                 </div>
 
                 <button type="button" class="btn-cadastrar" onclick="realizarCadastro()">Criar conta</button>
@@ -39,7 +39,7 @@
     </div>
     <script src="assets/scripts/script.js"></script>
     <script>
-        function togglePassword(inputId) {
+        function MostrarSenha(inputId) {
             const input = document.getElementById(inputId);
             const button = input.parentElement.querySelector('.toggle-password');
             const type = input.type === 'password' ? 'text' : 'password';
