@@ -11,6 +11,11 @@ router.get('/buscar', function (req, res) {
     jogoController.buscar(req, res);
 });
 
+router.get('/buscarId/:id', function (req, res) {
+    jogoController.buscarId(req, res);
+});
+
+
 
 
 module.exports = router;

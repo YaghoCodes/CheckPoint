@@ -70,43 +70,53 @@ body {
     color: rgba(255, 255, 255, 0.15);
 }
 
-.btn-acao {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: "Space Grotesk", sans-serif;
+.status-btns {
     display: flex;
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+}
+
+.btn-status {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
+    padding: 10px 6px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.2s;
 }
 
-.btn-jogado {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+
+
+.status-icon {
+    font-size: 16px;
 }
 
-.btn-jogado:hover {
-    border-color: rgba(52, 199, 89, 0.4);
-    color: #34c759;
-    background: rgba(52, 199, 89, 0.06);
-}
-
-.btn-lista {
-    background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.btn-lista:hover {
-    border-color: rgba(74, 158, 219, 0.4);
+.btn-status.ativo-wishlist {
+    border-color: rgba(74, 158, 219, 0.5);
     color: #4A9EDB;
-    background: rgba(74, 158, 219, 0.06);
+    background: rgba(74, 158, 219, 0.08);
+}
+
+.btn-status.ativo-jogando {
+    border-color: rgba(251, 191, 36, 0.5);
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.08);
+}
+
+.btn-status.ativo-concluido {
+    border-color: rgba(52, 199, 89, 0.5);
+    color: #34c759;
+    background: rgba(52, 199, 89, 0.08);
 }
 
 .jogo-right {
@@ -165,6 +175,9 @@ body {
     color: rgba(255, 255, 255, 0.5);
     line-height: 1.7;
     max-width: 580px;
+    max-height: 215px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .section-card {
@@ -182,7 +195,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* ESTRELAS */
+
 .stars-input {
     display: flex;
     gap: 6px;
@@ -196,7 +209,6 @@ body {
     background: none;
     border: none;
     padding: 0;
-    transition: color 0.15s, transform 0.1s;
     line-height: 1;
 }
 
@@ -205,11 +217,7 @@ body {
     color: #f0b429;
 }
 
-.star-btn:active {
-    transform: scale(0.9);
-}
 
-/* TEXTAREA */
 .review-textarea {
     width: 100%;
     background: rgba(255, 255, 255, 0.03);
@@ -221,7 +229,6 @@ body {
     resize: vertical;
     min-height: 100px;
     outline: none;
-    font-family: "Space Grotesk", sans-serif;
     transition: border-color 0.2s;
     margin-bottom: 1rem;
 }
@@ -230,9 +237,6 @@ body {
     color: rgba(255, 255, 255, 0.2);
 }
 
-.review-textarea:focus {
-    border-color: rgba(74, 158, 219, 0.35);
-}
 
 .btn-publicar {
     background-color: #4A9EDB;
@@ -243,28 +247,15 @@ body {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: "Space Grotesk", sans-serif;
-    transition: opacity 0.2s;
 }
 
-.btn-publicar:hover {
-    opacity: 0.85;
-}
 
-/* REVIEWS DA COMUNIDADE */
 .community-review-card {
     padding: 1rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.community-review-card:first-child {
-    padding-top: 0;
-}
 
-.community-review-card:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
 
 .community-review-top {
     display: flex;

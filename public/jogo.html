@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/styleNavbar.css">
     <link rel="stylesheet" href="assets/styles/styleJogo.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <title>CheckPoint — Jogo</title>
-   
+
 </head>
 
 <body>
@@ -29,35 +30,44 @@
 
 
 
+
+
     <div class="container-main">
 
 
         <div class="jogo-hero">
 
- 
+
             <div class="jogo-left">
                 <div class="jogo-capa">
-
-                    <div class="jogo-capa-placeholder" id="jogo-capa-placeholder">CAPA</div>
+                    <div class="jogo-capa-placeholder" id="jogo_capa_placeholder"></div>
                 </div>
-                <button class="btn-acao btn-jogado" id="btn-jogado" onclick="marcarJogado()">
-                    ✓ Marcar como jogado
-                </button>
-                <button class="btn-acao btn-lista" id="btn-lista" onclick="adicionarLista()">
-                    + Adicionar à lista
-                </button>
+                <div class="status-btns">
+                    <button class="btn-status" id="btn-wishlist" onclick="setStatus('wishlist')">
+                        <div class="status-icon-box"><i class="ti ti-bookmark"></i></div>
+                        <span>Wishlist</span>
+                    </button>
+                    <button class="btn-status" id="btn-jogando" onclick="setStatus('jogando')">
+                        <div class="status-icon-box"><i class="ti ti-player-play"></i></div>
+                        <span>Jogando</span>
+                    </button>
+                    <button class="btn-status" id="btn-concluido" onclick="setStatus('concluido')">
+                        <div class="status-icon-box"><i class="ti ti-check"></i></div>
+                        <span>Concluído</span>
+                    </button>
+                </div>
             </div>
 
 
             <div class="jogo-right">
-                <div class="jogo-label" id="jogo-estudio">// Estúdio Independente</div>
-                <h1 class="jogo-nome" id="jogo-nome">Nome do Jogo</h1>
+                <div class="jogo-label" id="jogo_estudio">// Estúdio Independente</div>
+                <h1 class="jogo-nome" id="jogo_nome">Nome do Jogo</h1>
                 <div class="jogo-meta">
-                    <span class="jogo-meta-item">ano<span id="jogo-ano">2024</span></span>
-                    <span class="jogo-meta-item">cate<span id="jogo-genero">Categoria</span></span>
-                    <span class="jogo-nota-badge">rating<span id="jogo-nota-media">4.6</span></span>
+                    <span class="jogo-meta-item">Ano de Lançamento<span id="jogo_ano">2024</span></span>
+                    <span class="jogo-meta-item">Categoria<span id="jogo_genero">Categoria</span></span>
+                    <span class="jogo-nota-badge">Nota<span id="jogo_nota-media">4.6</span></span>
                 </div>
-                <p class="jogo-descricao" id="jogo-descricao">
+                <p class="jogo-descricao" id="jogo_descricao">
                     Descrição do jogo aparece aqui. Substitua pelo conteúdo vindo do backend.
                 </p>
             </div>
@@ -80,7 +90,7 @@
             <button class="btn-publicar" onclick="publicarReview()">Publicar review</button>
         </div>
 
-        <!-- REVIEWS DA COMUNIDADE -->
+
         <div class="section-card">
             <div class="section-title">Reviews da comunidade</div>
 
@@ -115,8 +125,25 @@
     <script>
         validarSessaoCatalogo();
         const params = new URLSearchParams(window.location.search);
-
         const id = params.get("id");
+        console.log(id)
+        async function buscarInfos() {
+            const resultado = await fetch(`/jogos/buscarId/${id}`);
+            const jogoUnico = await resultado.json();
+            plotarDados(jogoUnico);
+        }
+
+        buscarInfos()
+
+        function plotarDados(dados) {
+            jogo_genero.innerHTML = `${dados.genero[0]} ${dados.genero[1] ? dados.genero[1] : ""}`
+            jogo_estudio.innerHTML = `// ${dados.dev.nome ? dados.dev.nome : " ESTUDIO DESCONHECIDO / INDEPENDENTE"}`
+            jogo_ano.innerHTML = `${dados.lancamento ? dados.lancamento : "data desconhecida"}`
+            jogo_capa_placeholder.innerHTML = `<img src="${dados.imagem}" alt="">`
+            jogo_nome.innerHTML = `${dados.nome ? dados.nome : "Nome Desconhecido"}`
+            jogo_descricao.innerHTML = `${dados.desc ? dados.desc : "Sem descrição disponivel :("}`
+            console.log(dados.plat)
+        }
 
         console.log(id);
         var notaSelecionada = 0;
@@ -129,35 +156,51 @@
                 btn.classList.toggle("ativa", v <= valor);
             });
         }
+        var statusAtual = null;
 
-        function marcarJogado() {
-            const btn = document.getElementById("btn-jogado");
-            const marcado = btn.dataset.marcado === "true";
-            btn.dataset.marcado = !marcado;
-            btn.textContent = marcado ? "✓ Marcar como jogado" : "✓ Jogado";
-            btn.style.borderColor = marcado ? "" : "rgba(52, 199, 89, 0.4)";
-            btn.style.color = marcado ? "" : "#34c759";
-            // integrar com backend aqui
+        function setStatus(status) {
+            document.querySelectorAll(".btn-status").forEach(btn => {
+                btn.classList.remove("ativo-wishlist", "ativo-jogando", "ativo-concluido");
+            });
+
+            if (statusAtual === status) {
+                statusAtual = null;
+                return;
+            }
+
+            statusAtual = status;
+            document.getElementById(`btn-${status}`).classList.add(`ativo-${status}`);
+            console.log(status)
+            atualizarStatus(status);
         }
 
-        function adicionarLista() {
-            const btn = document.getElementById("btn-lista");
-            const adicionado = btn.dataset.adicionado === "true";
-            btn.dataset.adicionado = !adicionado;
-            btn.textContent = adicionado ? "+ Adicionar à lista" : "✓ Na lista";
-            btn.style.borderColor = adicionado ? "" : "rgba(74, 158, 219, 0.4)";
-            btn.style.color = adicionado ? "" : "#4A9EDB";
-            // integrar com backend aqui
+        async function atualizarStatus(status){
+          const resposta = await fetch(`/avaliacoes/adicionar`,{
+            method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                 body: JSON.stringify({
+                    usuario: sessionStorage.ID_USUARIO,
+                    jogo: id,
+                    status: status,
+                }),
+          })  
         }
 
         function publicarReview() {
             const texto = document.getElementById("review-texto").value.trim();
-            if (!notaSelecionada) return alert("Selecione uma nota antes de publicar.");
-            if (!texto) return alert("Escreva algo na sua review.");
-            // integrar com backend aqui
+            if (!notaSelecionada) {
+             return alert("Selecione uma nota antes de publicar.");
+            }
+            if (!texto) {
+             return alert("Escreva algo na sua review.");
+            }
+            
             console.log({ nota: notaSelecionada, texto });
         }
     </script>
 
 </body>
+
 </html>

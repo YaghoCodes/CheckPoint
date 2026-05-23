@@ -5,11 +5,11 @@ var api_key = process.env.API_KEY;
 async function listar(req, res) {
     try {
         const resposta = await fetch(`https://api.rawg.io/api/games?key=${api_key}&page_size=30&ordering=-added`);
-    
+
         const data = await resposta.json();
 
 
-        const listaJogos = data.results.map(jog =>({
+        const listaJogos = data.results.map(jog => ({
             id: jog.id,
             nome: jog.name,
             imagem: jog.background_image,
@@ -20,13 +20,13 @@ async function listar(req, res) {
         }));
 
         res.json(listaJogos);
-        }
+    }
     catch (erro) {
-    console.log("ERRO COMPLETO:", erro);
-    res.status(500).json({
-        erro: "Erro ao buscar Jogo"
-    });
-}
+        console.log("ERRO COMPLETO:", erro);
+        res.status(500).json({
+            erro: "Erro ao buscar Jogo"
+        });
+    }
 }
 
 async function buscar(req, res) {
@@ -35,11 +35,11 @@ async function buscar(req, res) {
         const termo = req.query.nome;
 
         const resposta = await fetch(`https://api.rawg.io/api/games?key=${api_key}&search=${termo}&page_size=30&ordering=-added`);
-    
+
         const data = await resposta.json();
 
 
-        const listaJogos = data.results.map(jog =>({
+        const listaJogos = data.results.map(jog => ({
             id: jog.id,
             nome: jog.name,
             imagem: jog.background_image,
@@ -50,17 +50,79 @@ async function buscar(req, res) {
         }));
 
         res.json(listaJogos);
-        }
+    }
     catch (erro) {
-    console.log("ERRO COMPLETO:", erro);
-    res.status(500).json({
-        erro: "Erro ao buscar Jogo"
-    });
-}
+        console.log("ERRO COMPLETO:", erro);
+        res.status(500).json({
+            erro: "Erro ao buscar Jogo"
+        });
+    }
 }
 
+async function buscarId(req, res) {
+    try {
 
+        const termo = req.params.id;
+
+        const resposta = await fetch(`https://api.rawg.io/api/games/${termo}?key=${api_key}`);
+
+        const data = await resposta.json();
+        console.log(data);
+        function tratandoDev(lista) {
+            let menorDev = lista[0];
+            for (dev in lista) {
+                if (lista[dev].id < menorDev.id) {
+                    menorDev = lista[dev];
+                }
+            }
+            return {
+                id: menorDev.id,
+                nome: menorDev.name
+            }
+        }
+
+function tratandoPlataforma(lista) {
+    const plataforma = lista[0].platform;
+
+    return {
+        id: plataforma.id,
+        nome: plataforma.name
+    };
+}
+
+        function tratandoDesc(desc){
+            let descTratada = desc.replace(/\n/g, " ").split("Español")
+            return descTratada[0]
+        }
+
+        const teste = tratandoPlataforma(data.platforms);
+
+console.log(teste);
+
+        const JogoUnico = {
+            id: data.id,
+            nome: data.name,
+            imagem: data.background_image,
+            genero: [
+                data.genres[0]?.name,
+                data.genres[1]?.name
+            ],
+            lancamento: data.released.slice(0, 4),
+            dev: tratandoDev(data.developers),
+            desc: tratandoDesc(data.description_raw),
+            plat: tratandoPlataforma(data.platforms)
+        };
+        res.json(JogoUnico);
+    }
+    catch (erro) {
+        console.log("ERRO COMPLETO:", erro);
+        res.status(500).json({
+            erro: "Erro ao buscar Jogo"
+        });
+    }
+}
 module.exports = {
     listar,
-    buscar
+    buscar,
+    buscarId
 }
