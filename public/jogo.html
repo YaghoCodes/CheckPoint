@@ -85,7 +85,7 @@
                 <button class="star-btn" data-valor="5" onclick="selecionarEstrela(5)">☆</button>
             </div>
 
-            <textarea class="review-textarea" id="review-texto" placeholder="O que você achou desse jogo?"></textarea>
+            <textarea class="review-textarea" id="review_texto" placeholder="O que você achou desse jogo?"></textarea>
 
             <button class="btn-publicar" onclick="publicarReview()">Publicar review</button>
         </div>
@@ -127,9 +127,10 @@
         const params = new URLSearchParams(window.location.search);
         const id = params.get("id");
         console.log(id)
+        let jogoUnico;
         async function buscarInfos() {
             const resultado = await fetch(`/jogos/buscarId/${id}`);
-            const jogoUnico = await resultado.json();
+            jogoUnico = await resultado.json();
             plotarDados(jogoUnico);
         }
 
@@ -142,10 +143,8 @@
             jogo_capa_placeholder.innerHTML = `<img src="${dados.imagem}" alt="">`
             jogo_nome.innerHTML = `${dados.nome ? dados.nome : "Nome Desconhecido"}`
             jogo_descricao.innerHTML = `${dados.desc ? dados.desc : "Sem descrição disponivel :("}`
-            console.log(dados.plat)
         }
 
-        console.log(id);
         var notaSelecionada = 0;
 
         function selecionarEstrela(valor) {
@@ -165,6 +164,10 @@
 
             if (statusAtual === status) {
                 statusAtual = null;
+
+                console.log("Status removido");
+
+                atualizarStatus("removido");
                 return;
             }
 
@@ -174,30 +177,48 @@
             atualizarStatus(status);
         }
 
-        async function atualizarStatus(status){
-          const resposta = await fetch(`/avaliacoes/adicionar`,{
-            method: "POST",
+        async function atualizarStatus(status) {
+            const resposta = await fetch(`/avaliacoes/adicionar`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                 body: JSON.stringify({
+                body: JSON.stringify({
                     usuario: sessionStorage.ID_USUARIO,
-                    jogo: id,
+                    jogo: jogoUnico,
                     status: status,
                 }),
-          })  
+            })
         }
 
-        function publicarReview() {
-            const texto = document.getElementById("review-texto").value.trim();
+        async function publicarReview() {
+            var texto = review_texto.value.trim();
             if (!notaSelecionada) {
-             return alert("Selecione uma nota antes de publicar.");
+                return alert("Selecione uma nota antes de publicar.");
             }
-            if (!texto) {
-             return alert("Escreva algo na sua review.");
+            if (statusAtual == null) {
+                return alert("Selecione um status.");
             }
-            
-            console.log({ nota: notaSelecionada, texto });
+
+            const resposta = await fetch("/avaliacoes/review", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+
+                body: JSON.stringify({
+                    usuario: sessionStorage.ID_USUARIO,
+                    jogo: jogoUnico.id,
+                    nota: notaSelecionada,
+                    review: texto
+                })
+            });
+
+            if (resposta.ok) {
+                alert("Review publicada!");
+            } else {
+                alert("Erro ao publicar review");
+            }
         }
     </script>
 
