@@ -19,6 +19,10 @@ body {
     color: #4A9EDB;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
 
 .container-main {
@@ -95,8 +99,6 @@ body {
     transition: all 0.2s;
 }
 
-
-
 .status-icon {
     font-size: 16px;
 }
@@ -127,10 +129,10 @@ body {
 }
 
 .jogo-label {
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.12em;
-    color: #4A9EDB;
+    color: rgba(122, 122, 122, 0.9);
     text-transform: uppercase;
     opacity: 0.8;
 }
@@ -283,4 +285,11 @@ body {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.4);
     line-height: 1.5;
+}
+
+.community-empty {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+    font-style: italic;
 }

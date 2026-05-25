@@ -1,27 +1,20 @@
+function plotarNavbar() {
+    var colocarBotaoPerfil = document.getElementById("colocarBotaoPerfil");
+
+    colocarBotaoPerfil.innerHTML = ` <a class="profile-btn" aria-label="Meu perfil" href="perfil.html?id=${sessionStorage.ID_USUARIO}">
+                <div class="profile-avatar" id="c_usuario">U</div>
+                <span class="profile-name" id="n_usuario">username</span>
+            </a>`
+}
+
 function validarSessaoPerfil() {
     var email = sessionStorage.EMAIL_USUARIO;
     var nome = sessionStorage.NOME_USUARIO;
-
-    var n_usuario = document.getElementById("n_usuario");
-    var c_usuario = document.getElementById("c_usuario");
-    var w_usuario = document.getElementById("w_usuario");
-    var profile_avatar = document.getElementById("profile-avatar");
-    var comentario_icone1 = document.getElementById("comentario-icone1");
-    var comentario_icone2 = document.getElementById("comentario-icone2");
-    var comentario_icone3 = document.getElementById("comentario-icone3");
-    var email_hero = document.getElementById("email_usuario");
-
-    if (email != null && nome != null) {
+    if (!(email != null && nome != null)) {
+        window.location = "../login.html";
+    } else {
         n_usuario.innerHTML = nome;
         c_usuario.innerHTML = nome[0].toUpperCase();
-        w_usuario.innerHTML = nome + ".";
-        profile_avatar.innerHTML = nome[0].toUpperCase();
-        comentario_icone1.innerHTML = nome[0].toUpperCase();
-        comentario_icone2.innerHTML = nome[0].toUpperCase();
-        comentario_icone3.innerHTML = nome[0].toUpperCase();
-        email_hero.innerHTML = email;
-    } else {
-        window.location = "../login.html";
     }
 }
 
@@ -55,4 +48,20 @@ function validarSessaoCatalogo() {
     } else {
         window.location = "../login.html";
     }
+}
+
+function miniMensagem(msg) {
+    const div = document.createElement("div");
+    div.innerText = msg;
+    div.style.position = "fixed";
+    div.style.bottom = "20px";
+    div.style.right = "20px";
+    div.style.background = "#222";
+    div.style.color = "#fff";
+    div.style.padding = "10px";
+    div.style.borderRadius = "8px";
+
+    document.body.appendChild(div);
+
+    setTimeout(() => div.remove(), 3000);
 }

@@ -50,6 +50,116 @@ async function atualizarStatus(req, res) {
     }
 }
 
+async function fazerReview(req, res) {
+    try {
+        const usuario = req.body.usuario;
+        const jogo = req.body.jogo;
+        const nota = req.body.nota;
+        const review = req.body.review;
+
+        console.log("entrei no Controller review");
+
+        if (!nota || nota < 1 || nota > 5) {
+            return res.status(400).json({
+                erro: "Nota inválida"
+            });
+        }
+
+        await avaliacaoModel.atualizarReview(usuario, jogo, nota, review);
+
+        return res.status(200).json({
+            mensagem: "review publicada com sucesso"
+        });
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro publicar Review"
+        });
+    }
+}
+
+async function buscarRelacaoUsuario(req, res) {
+
+    try {
+        const usuario = req.params.idUsuario;
+        const jogo = req.params.idJogo;
+        console.log("entrei no Controller pra buscar relaçao de jogador e jogo");
+        const jogoExiste = await jogosModel.buscarPorId(jogo);
+
+        if (jogoExiste.length === 0) {
+            console.log("Jogo nao existe no BD, logo, nao ia ter relaçao")
+            return res.status(404).json({
+                mensagem: "Jogo nao existe ainda no BD"
+            })
+        }
+        const relacaoExiste = await avaliacaoModel.buscarAvaliacao(usuario, jogo);
+
+        if (relacaoExiste.length === 0) {
+
+            return res.status(404).json({
+                erro: "Usuário ainda não avaliou esse jogo"
+            });
+        }
+        return res.status(200).json(relacaoExiste[0]);
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar relação"
+        });
+    }
+}
+
+async function buscarMedia(req, res) {
+    try {
+        const jogo = req.params.idJogo;
+
+        console.log("Entrei no controller pra procurar media")
+
+        const media = await avaliacaoModel.calcularMedia(jogo)
+
+        return res.status(200).json(media[0])
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar media das notas"
+        });
+    }
+}
+
+async function buscarReviews(req, res) {
+    try {
+        const jogo = req.params.idJogo;
+        console.log("entrei no Controller pra buscar Reviews da comunidade");
+        const jogoExiste = await jogosModel.buscarPorId(jogo);
+
+        if (jogoExiste.length === 0) {
+            console.log("Jogo nao existe no BD, logo, nao ia ter reviews")
+            return res.status(404).json({
+                mensagem: "Jogo nao existe ainda no BD"
+            })
+        }
+
+        const reviewsComunidade = await avaliacaoModel.buscarReviews(jogo);
+
+        return res.status(200).json(reviewsComunidade);
+
+
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar reviews da comunidade"
+        });
+    }
+}
+
 module.exports = {
-    atualizarStatus
+    atualizarStatus,
+    fazerReview,
+    buscarRelacaoUsuario,
+    buscarMedia,
+    buscarReviews
 };

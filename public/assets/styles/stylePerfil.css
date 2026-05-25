@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
-.texto-azul {
-    color: #4A9EDB;
-}
 
 * {
     margin: 0;
@@ -18,87 +14,119 @@ html, body {
     scroll-behavior: smooth;
 }
 
+.texto-azul {
+    color: #4A9EDB;
+}
+
 .container-main {
     margin: 0 auto;
     max-width: 70%;
-    height: 100%;
     padding-top: 100px;
+    padding-bottom: 3rem;
 }
 
 .hero {
     width: 100%;
-    height: 25vh;
-    padding-top: 3vh;
+    padding: 2.5rem 0 2rem;
     color: rgba(122, 122, 122, 0.9);
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    margin-bottom: 2rem;
 }
 
 .hero-welcome {
     letter-spacing: 2px;
-    margin-bottom: 1vh;
-    font-size: 0.9rem;
-    color: #4A9EDB;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
 }
 
-.profile-avatar-hero{
-    width: 100px;
-    height: 100px;
-    border-radius: 20%;
+.profile-avatar-hero {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
     background: rgba(74, 158, 219, 0.15);
     border: 1px solid rgba(74, 158, 219, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
     color: #4A9EDB;
-    margin-right: 30px;
+    flex-shrink: 0;
+}
+
+.wrapper-hero {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .hero-resume {
     color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 1.2px;
-    font-size: 1.05rem;
-    max-width: 600px;
-
+    font-size: 1rem;
 }
 
 .hero-resume h1 {
-    margin-bottom: 1vh;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-infos {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.email-hero, .date-hero {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.3px;
 }
 
 .hero-resume p {
-    font-size: 1rem;
+    font-size: 14px;
     letter-spacing: 0px;
-    margin-bottom: 1.6vh;
-    color: rgba(227, 227, 227, 0.537);
+    color: rgba(227, 227, 227, 0.5);
+    line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3rem; 
+    max-height: 6.5vh;
+    max-width: 800px;
 }
 
-.email-hero {
+.desc-editor {
+    display: none;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(74, 158, 219, 0.35);
+    border-radius: 8px;
+    padding: 8px 12px;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.296);
-    margin-bottom: 2px;
-    letter-spacing: 0.5px;
-    margin-right: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: "Space Grotesk", sans-serif;
+    resize: none;
+    outline: none;
+    margin-top: 4px;
 }
 
-.date-hero {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.296);
-    margin-bottom: 2px;
-    letter-spacing: 0.5px;
+.btn-editar {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+    font-family: "Space Grotesk", sans-serif;
 }
 
-.wrapper-hero{
-    display: flex;
-    flex-direction: column;
-}
-
-/* Main */
 
 .home-main {
     width: 100%;
@@ -114,10 +142,10 @@ html, body {
 }
 
 .playing-now > h1 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
-    margin: 1rem 0;
+    margin-bottom: 1rem;
 }
 
 .playing-card {
@@ -151,20 +179,6 @@ html, body {
     gap: 4px;
 }
 
-.playing-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 500;
-    color: #4A9EDB;
-    background: rgba(74, 158, 219, 0.12);
-    border: 1px solid rgba(74, 158, 219, 0.2);
-    border-radius: 99px;
-    padding: 2px 8px;
-    width: fit-content;
-}
-
 .playing-name {
     font-size: 15px;
     font-weight: 600;
@@ -192,54 +206,51 @@ html, body {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.destaques{
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.destaque-main{
-    display: flex;
-    justify-content: space-between;
-
-}
-
-.destaque-box{
-    background-color: #161b22;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 10px;
-    padding: 1.25rem;
-    padding-top: 0.5rem;
-    width: 48%;
+.destaques {
+    margin-top: 2rem;
 }
 
 .destaque-header {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
-    margin-top: 3rem;
     margin-bottom: 1rem;
 }
 
+.destaque-main {
+    display: flex;
+    gap: 1rem;
+}
+
+.destaque-box {
+    background-color: #161b22;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1rem;
+    flex: 1;
+}
+
 .destaque-box-header {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: rgba(139, 139, 139, 0.85);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
 }
 
 .destaque-box-cover {
     width: 100%;
-    height:100px;
+    height: 90px;
     border-radius: 6px;
     background: linear-gradient(135deg, #3b1fa3, #7c3aed);
-    border: 1px solid rgba(255, 255, 255, 0.07);
     display: flex;
     align-items: flex-end;
-    justify-content: left;
-    font-size: 17px;
-    color: rgba(255, 255, 255, 0.781);
-    margin-bottom: 0.5rem;
-    padding: 4%;
+    padding: 0.6rem 0.75rem;
+    font-size: 16px;
     font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.6rem;
 }
 
 .destaque-box-desc {
@@ -252,8 +263,8 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .community-reviews-header {
@@ -267,17 +278,6 @@ html, body {
     font-size: 18px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
-}
-
-.community-reviews-header a {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.3);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.community-reviews-header a:hover {
-    color: rgba(255, 255, 255, 0.6);
 }
 
 .review-card {
@@ -320,12 +320,6 @@ html, body {
     font-size: 11px;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
-}
-
-.review-username {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.4);
-    margin-bottom: 2px;
 }
 
 .review-game {
@@ -374,7 +368,6 @@ html, body {
 }
 
 .quick-stats {
-    margin-top: 6vh;
     background-color: #161b22;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 10px;
@@ -386,9 +379,6 @@ html, body {
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .row-stats {

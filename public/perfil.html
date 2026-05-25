@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -18,37 +18,37 @@
                 <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
+            <span id="colocarBotaoPerfil">
             <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
                 <div class="profile-avatar" id="c_usuario">U</div>
                 <span class="profile-name" id="n_usuario">username</span>
             </a>
+            </span>
         </div>
     </header>
+
     <div class="container-main">
         <div class="hero">
-            <div class="profile-avatar-hero" id="profile-avatar">U</div>
+            <div class="profile-avatar-hero" id="profile_avatar">U</div>
             <div class="wrapper-hero">
-                <div class="hero-welcome">
-                    // PERFIL
-                </div>
+                <div class="hero-welcome">// PERFIL</div>
                 <div class="hero-resume">
                     <h1>@<span id="w_usuario"></span></h1>
-                    <p id="desc_usuario">descrição teste e placeholder adcionar texto para teste caramba vai vai vai vai
-                        vai aaaaa aaaaaaaaaa aaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa
-                        aaaaaaaaaaaaaaaa aa</p>
-                        <div class="hero-infos">
-                            <span class="email-hero" id="email_usuario">emailteste@gmail.com</span>
-                            <span class="date-hero" id="date_usuario">Membro desde 2026</span>
-                        </div>
+                    <div class="hero-infos">
+                        <span class="email-hero" id="email_usuario"></span>
+                        <span class="date-hero" id="date_usuario"></span>
+                    </div>
+                    <p id="desc_usuario"></p>
+                    <textarea class="desc-editor" id="desc_editor" maxlength="200"></textarea>
                 </div>
             </div>
-
+            <button class="btn-editar" onclick="editarDesc()">✏ Editar perfil</button>
         </div>
 
         <div class="home-main">
             <div class="left-col">
                 <div class="playing-now">
-                    <h1> Jogando agora</h1>
+                    <h1>Jogando agora</h1>
                     <div class="playing-card">
                         <div class="game-cover">COVER</div>
                         <div class="playing-info">
@@ -58,24 +58,26 @@
                         <a href="#" class="playing-btn">Ver jogo →</a>
                     </div>
                 </div>
+
                 <div class="destaques">
                     <div class="destaque-header">Destaques</div>
                     <div class="destaque-main">
                         <div class="destaque-box">
-                            <div class="destaque-box-header">Genero Favorito</div>
+                            <div class="destaque-box-header">Gênero Favorito</div>
                             <div class="destaque-box-cover" id="genero_favorito">Ação</div>
                             <div class="destaque-box-desc">A categoria de jogos que mais aparece na sua biblioteca</div>
                         </div>
                         <div class="destaque-box">
                             <div class="destaque-box-header">Plataforma Preferida</div>
-                            <div class="destaque-box-cover" id="plataforma_preferida">Pc / Steam</div>
+                            <div class="destaque-box-cover" id="plataforma_preferida">PC / Steam</div>
                             <div class="destaque-box-desc">Onde você passa a maior parte do seu tempo de jogo.</div>
                         </div>
                     </div>
                 </div>
+
                 <div class="community-reviews">
                     <div class="community-reviews-header">
-                        <h1>Suas Ultimas Reviews</h1>
+                        <h1>Suas Últimas Reviews</h1>
                     </div>
 
                     <div class="review-card">
@@ -133,9 +135,10 @@
                     </div>
                 </div>
             </div>
+
             <div class="right-col">
                 <div class="quick-stats">
-                    <h1>Status Rapido</h1>
+                    <h1>Status Rápido</h1>
                     <div class="row-stats">
                         <div class="box-stats">
                             <h1>22</h1>
@@ -161,11 +164,64 @@
         </div>
     </div>
 
-
     <script src="assets/scripts/sessao.js"></script>
     <script>
+        plotarNavbar();
         validarSessaoPerfil();
 
+        const idPerfil = new URLSearchParams(window.location.search).get("id")
+            || sessionStorage.ID_USUARIO;
+
+        
+
+        async function carregarPerfil() {
+            const res = await fetch(`/usuarios/perfil/${idPerfil}`);
+            const dados = await res.json();
+
+            w_usuario.innerHTML = dados.username;
+            desc_usuario.innerHTML = dados.aboutme;
+            email_usuario.innerHTML = dados.email;
+            date_usuario.innerHTML = `Membro desde ${dados.criado}`;
+            profile_avatar.innerHTML = dados.username[0].toUpperCase() + dados.username[1];
+        }
+
+
+        var editando = false;
+
+        function editarDesc() {
+            const p = document.getElementById("desc_usuario");
+            const textarea = document.getElementById("desc_editor");
+
+            if (editando) {
+                salvarAboutMe();
+                return;
+            }
+
+            editando = true;
+            p.style.display = "none";
+            textarea.style.display = "block";
+            textarea.value = p.innerHTML;
+            textarea.focus();
+        }
+
+        async function salvarAboutMe() {
+            const p = document.getElementById("desc_usuario");
+            const textarea = document.getElementById("desc_editor");
+            const texto = textarea.value.trim();
+
+            editando = false;
+            p.innerHTML = texto;
+            textarea.style.display = "none";
+            p.style.display = "block";
+
+            await fetch(`/usuarios/perfil/editarDesc/${idPerfil}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ aboutme: texto })
+            });
+        }
+
+        carregarPerfil();
     </script>
 </body>
 

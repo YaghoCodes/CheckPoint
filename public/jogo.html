@@ -21,10 +21,12 @@
                 <li><a href="catalogo.html" class="active">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
-            <a class="profile-btn" href="perfil.html">
+           <span id="colocarBotaoPerfil">
+            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
                 <div class="profile-avatar" id="c_usuario">U</div>
                 <span class="profile-name" id="n_usuario">username</span>
             </a>
+            </span>
         </div>
     </header>
 
@@ -65,7 +67,7 @@
                 <div class="jogo-meta">
                     <span class="jogo-meta-item">Ano de Lançamento<span id="jogo_ano">2024</span></span>
                     <span class="jogo-meta-item">Categoria<span id="jogo_genero">Categoria</span></span>
-                    <span class="jogo-nota-badge">Nota<span id="jogo_nota-media">4.6</span></span>
+                    <span class="jogo-nota-badge">Nota<span id="jogo_nota_media">4.6</span></span>
                 </div>
                 <p class="jogo-descricao" id="jogo_descricao">
                     Descrição do jogo aparece aqui. Substitua pelo conteúdo vindo do backend.
@@ -87,14 +89,14 @@
 
             <textarea class="review-textarea" id="review_texto" placeholder="O que você achou desse jogo?"></textarea>
 
-            <button class="btn-publicar" onclick="publicarReview()">Publicar review</button>
+            <button class="btn-publicar" id="btn_publicar_review" onclick="publicarReview()">Publicar review</button>
         </div>
 
 
         <div class="section-card">
             <div class="section-title">Reviews da comunidade</div>
 
-            <div id="reviews-lista">
+            <div id="reviews_lista">
                 <div class="community-review-card">
                     <div class="community-review-top">
                         <span class="community-review-user">@ana</span>
@@ -123,18 +125,31 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
-        validarSessaoCatalogo();
+        var possuiReview = false;
+        var statusAtual = null;
+        var notaSelecionada = 0;
+        let jogoUnico;
         const params = new URLSearchParams(window.location.search);
         const id = params.get("id");
-        console.log(id)
-        let jogoUnico;
+
         async function buscarInfos() {
             const resultado = await fetch(`/jogos/buscarId/${id}`);
             jogoUnico = await resultado.json();
             plotarDados(jogoUnico);
+            carregarRelacaoUsuario();
         }
 
-        buscarInfos()
+        async function carregarNotaMedia() {
+            const resposta = await fetch(`/avaliacoes/media/${id}`);
+
+            if (!resposta.ok) {
+                return;
+            }
+
+            const dados = await resposta.json();
+
+            jogo_nota_media.innerHTML = dados.media || "0.0";
+        }
 
         function plotarDados(dados) {
             jogo_genero.innerHTML = `${dados.genero[0]} ${dados.genero[1] ? dados.genero[1] : ""}`
@@ -145,7 +160,61 @@
             jogo_descricao.innerHTML = `${dados.desc ? dados.desc : "Sem descrição disponivel :("}`
         }
 
-        var notaSelecionada = 0;
+        async function carregarRelacaoUsuario() {
+
+            const resposta = await fetch(
+                `/avaliacoes/usuario-jogo/${sessionStorage.ID_USUARIO}/${id}`
+            );
+            if (!resposta.ok) {
+                console.log(resposta)
+                return;
+            }
+            const relacao = await resposta.json();
+
+            possuiReview =
+                relacao.review != null ||
+                relacao.nota != null;
+
+            if (possuiReview) {
+                btn_publicar_review.innerHTML = "Atualizar review";
+            } else {
+                btn_publicar_review.innerHTML = "Publicar review";
+            }
+
+
+            selecionarEstrela(relacao.nota);
+
+            let status = converterStatus(relacao.status);
+
+            aplicarStatusVisual(status);
+
+            if (relacao.review) {
+                review_texto.value = relacao.review;
+            }
+
+            console.log(relacao);
+
+        }
+
+        function atualizarEstadoReview() {
+            const bloqueado =
+                statusAtual == null ||
+                (
+                    statusAtual == "wishlist" &&
+                    !possuiReview
+                );
+
+            review_texto.disabled = bloqueado;
+            btn_publicar_review.disabled = bloqueado;
+
+            if (bloqueado) {
+                review_texto.placeholder =
+                    "Adicione o jogo como Jogando ou Concluído para avaliar.";
+            } else {
+                review_texto.placeholder =
+                    "O que você achou desse jogo?";
+            }
+        }
 
         function selecionarEstrela(valor) {
             notaSelecionada = valor;
@@ -155,29 +224,53 @@
                 btn.classList.toggle("ativa", v <= valor);
             });
         }
-        var statusAtual = null;
 
-        function setStatus(status) {
+        function aplicarStatusVisual(status) {
             document.querySelectorAll(".btn-status").forEach(btn => {
                 btn.classList.remove("ativo-wishlist", "ativo-jogando", "ativo-concluido");
             });
 
-            if (statusAtual === status) {
-                statusAtual = null;
-
-                console.log("Status removido");
-
-                atualizarStatus("removido");
+            if (status == null) {
+                atualizarEstadoReview();
                 return;
             }
 
             statusAtual = status;
             document.getElementById(`btn-${status}`).classList.add(`ativo-${status}`);
             console.log(status)
-            atualizarStatus(status);
+            atualizarEstadoReview();
         }
 
-        async function atualizarStatus(status) {
+        async function setStatus(status) {
+
+            if (statusAtual === status) {
+                aplicarStatusVisual(null);
+                atualizarEstadoReview();
+                await salvarStatus("removido");
+
+                return;
+            }
+
+            aplicarStatusVisual(status);
+            await salvarStatus(status);
+        }
+
+        function converterStatus(numero) {
+
+            if (numero == 0) {
+                return "wishlist";
+            }
+            else if (numero == 1) {
+                return "jogando";
+            }
+            else if (numero == 2) {
+                return "concluido";
+            }
+
+            return null;
+        }
+
+        async function salvarStatus(status) {
             const resposta = await fetch(`/avaliacoes/adicionar`, {
                 method: "POST",
                 headers: {
@@ -194,10 +287,10 @@
         async function publicarReview() {
             var texto = review_texto.value.trim();
             if (!notaSelecionada) {
-                return alert("Selecione uma nota antes de publicar.");
+                return miniMensagem("Selecione uma nota antes de publicar.");
             }
             if (statusAtual == null) {
-                return alert("Selecione um status.");
+                return miniMensagem("Selecione um status.");
             }
 
             const resposta = await fetch("/avaliacoes/review", {
@@ -205,7 +298,6 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-
                 body: JSON.stringify({
                     usuario: sessionStorage.ID_USUARIO,
                     jogo: jogoUnico.id,
@@ -213,13 +305,62 @@
                     review: texto
                 })
             });
-
             if (resposta.ok) {
-                alert("Review publicada!");
+                miniMensagem("Review publicada!");
+
+                carregarNotaMedia();
+                reviewComunidade();
             } else {
-                alert("Erro ao publicar review");
+                miniMensagem("Erro ao publicar review");
             }
         }
+
+        async function reviewComunidade() {
+            const resposta = await fetch(`/avaliacoes/reviewComunidade/${id}`);
+            if (!resposta.ok) {
+                reviews_lista.innerHTML = `
+            <div class="community-empty">
+                Seja o primeiro a avaliar este jogo
+            </div>
+        `;
+                return;
+            }
+
+            const reviews = await resposta.json();
+
+            if (!reviews || reviews.length === 0) {
+                reviews_lista.innerHTML = `
+            <div class="community-empty">
+                Seja o primeiro a avaliar este jogo
+            </div>`;
+                return;
+            }
+
+
+            reviews_lista.innerHTML = reviews.map(review => {
+                return `
+            <div class="community-review-card">
+                <div class="community-review-top">
+                    <span class="community-review-user">
+                    <a href="perfil.html?id=${review.id_usuario}">
+                     @${review.username}</a></span>
+                    <span class="community-review-nota">★ ${review.nota}</span>
+                </div>
+                <p class="community-review-text">
+                    ${review.review}
+                </p>
+            </div>`;
+            }).join('');
+        }
+
+
+
+        plotarNavbar();
+        validarSessaoPerfil();
+        buscarInfos();
+        carregarNotaMedia();
+        atualizarEstadoReview();
+        reviewComunidade();
     </script>
 
 </body>

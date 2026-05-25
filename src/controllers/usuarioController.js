@@ -70,7 +70,48 @@ function cadastrar(req, res) {
     }
 }
 
+async function carregarDadosUsuario(req, res){
+    try{
+        const usuario = req.params.idUsuario;
+        const dadosUsuario = await usuarioModel.buscarDadosPerfil(usuario);
+
+        return res.status(200).json(dadosUsuario[0]);
+    }catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar perfil do usuario"
+        });
+    }
+    
+}
+
+async function editarDescricao(req, res) {
+    try {
+        const idUsuario = req.params.idUsuario;
+        const aboutme = req.body.aboutme;
+
+        if (!aboutme) {
+            return res.status(400).json({
+                erro: "Descrição não pode ser vazia"
+            });
+        }
+        await usuarioModel.editarDescricao(idUsuario, aboutme);
+        return res.status(200).json({
+            mensagem: "Descrição atualizada com sucesso"
+        });
+
+    } catch (error) {
+        console.log("Erro ao editar descrição:", error);
+
+        return res.status(500).json({
+            erro: "Erro ao atualizar descrição"
+        });
+    }
+}
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    carregarDadosUsuario,
+    editarDescricao
 }

@@ -22,7 +22,30 @@ function cadastrar(nome, email, senha) {
     return database.executar(instrucaoSql);
 }
 
+async function buscarDadosPerfil(usuario) {
+        console.log("Cheguei no model de buscar as informações do usuario");
+        var instrucaoSql = `
+                SELECT username, email, aboutme, criado
+                FROM usuario WHERE id_usuario = ${usuario};    
+                `;
+        console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+        return database.executar(instrucaoSql);
+}
+
+async function editarDescricao(usuario, aboutme) {
+    console.log("Cheguei no model de atualizar o aboutme dos usuarios");
+        var instrucaoSql = `
+                UPDATE usuario
+                SET aboutme = ${`'${aboutme.replace(/'/g, "''")}'`}
+                WHERE id_usuario = ${usuario}  
+                `;
+        console.log("Executando a instrução SQL pra atualizar o aboutme dos usuarios: \n" + instrucaoSql);
+        return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    buscarDadosPerfil,
+    editarDescricao
 };
