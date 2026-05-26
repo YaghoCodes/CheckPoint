@@ -77,13 +77,15 @@
                 if (resposta.ok) {
                     resposta.json().then(json => {
                         console.log(json);
-                        sessionStorage.EMAIL_USUARIO = json.email;
-                        sessionStorage.NOME_USUARIO = json.username;
-                        sessionStorage.ID_USUARIO = json.id_usuario;
+                         sessionStorage.TOKEN = json.token;
+
+                        sessionStorage.NOME_USUARIO = json.usuario.username;
+                        sessionStorage.EMAIL_USUARIO = json.usuario.email;
+                        sessionStorage.ID_USUARIO = json.usuario.id;
                         alert("Login realizado com sucesso!");
                         setTimeout(function () {
                             window.location = "/home.html";
-                        }, 3000);
+                        }, 1000);
 
                     });
                 } else {

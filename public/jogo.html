@@ -21,11 +21,11 @@
                 <li><a href="catalogo.html" class="active">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
-           <span id="colocarBotaoPerfil">
-            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
-                <div class="profile-avatar" id="c_usuario">U</div>
-                <span class="profile-name" id="n_usuario">username</span>
-            </a>
+            <span id="colocarBotaoPerfil">
+                <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                    <div class="profile-avatar" id="c_usuario">U</div>
+                    <span class="profile-name" id="n_usuario">username</span>
+                </a>
             </span>
         </div>
     </header>
@@ -128,96 +128,84 @@
         var possuiReview = false;
         var statusAtual = null;
         var notaSelecionada = 0;
+
         let jogoUnico;
+
         const params = new URLSearchParams(window.location.search);
         const id = params.get("id");
 
         async function buscarInfos() {
             const resultado = await fetch(`/jogos/buscarId/${id}`);
             jogoUnico = await resultado.json();
+
             plotarDados(jogoUnico);
-            carregarRelacaoUsuario();
+            await carregarRelacaoUsuario();
+            atualizarEstadoReview();
         }
 
         async function carregarNotaMedia() {
             const resposta = await fetch(`/avaliacoes/media/${id}`);
 
-            if (!resposta.ok) {
-                return;
-            }
+            if (!resposta.ok) return;
 
             const dados = await resposta.json();
-
             jogo_nota_media.innerHTML = dados.media || "0.0";
         }
 
         function plotarDados(dados) {
-            jogo_genero.innerHTML = `${dados.genero[0]} ${dados.genero[1] ? dados.genero[1] : ""}`
-            jogo_estudio.innerHTML = `// ${dados.dev.nome ? dados.dev.nome : " ESTUDIO DESCONHECIDO / INDEPENDENTE"}`
-            jogo_ano.innerHTML = `${dados.lancamento ? dados.lancamento : "data desconhecida"}`
-            jogo_capa_placeholder.innerHTML = `<img src="${dados.imagem}" alt="">`
-            jogo_nome.innerHTML = `${dados.nome ? dados.nome : "Nome Desconhecido"}`
-            jogo_descricao.innerHTML = `${dados.desc ? dados.desc : "Sem descrição disponivel :("}`
+            jogo_genero.innerHTML = `${dados.genero[0]} ${dados.genero[1] ? dados.genero[1] : ""}`;
+            jogo_estudio.innerHTML = `// ${dados.dev?.nome || "ESTUDIO DESCONHECIDO"}`;
+            jogo_ano.innerHTML = `${dados.lancamento || "data desconhecida"}`;
+            jogo_capa_placeholder.innerHTML = `<img src="${dados.imagem}" alt="">`;
+            jogo_nome.innerHTML = dados.nome || "Nome Desconhecido";
+            jogo_descricao.innerHTML = dados.desc || "Sem descrição disponivel :(";
         }
 
         async function carregarRelacaoUsuario() {
 
-            const resposta = await fetch(
-                `/avaliacoes/usuario-jogo/${sessionStorage.ID_USUARIO}/${id}`
-            );
-            if (!resposta.ok) {
-                console.log(resposta)
-                return;
-            }
+            const resposta = await fetch(`/avaliacoes/usuario-jogo/${id}`, {
+                headers: {
+                    "Authorization": `Bearer ${sessionStorage.TOKEN}`
+                }
+            });
+
+            if (!resposta.ok) return;
+
             const relacao = await resposta.json();
 
-            possuiReview =
-                relacao.review != null ||
-                relacao.nota != null;
+            possuiReview = relacao.review != null || relacao.nota != null;
 
-            if (possuiReview) {
-                btn_publicar_review.innerHTML = "Atualizar review";
-            } else {
-                btn_publicar_review.innerHTML = "Publicar review";
-            }
+            btn_publicar_review.innerHTML = possuiReview
+                ? "Atualizar review"
+                : "Publicar review";
 
-
-            selecionarEstrela(relacao.nota);
+            selecionarEstrela(relacao.nota || 0);
 
             let status = converterStatus(relacao.status);
-
             aplicarStatusVisual(status);
 
             if (relacao.review) {
                 review_texto.value = relacao.review;
             }
-
-            console.log(relacao);
-
         }
 
         function atualizarEstadoReview() {
+
             const bloqueado =
                 statusAtual == null ||
-                (
-                    statusAtual == "wishlist" &&
-                    !possuiReview
-                );
+                (statusAtual == "wishlist" && !possuiReview);
 
             review_texto.disabled = bloqueado;
             btn_publicar_review.disabled = bloqueado;
 
-            if (bloqueado) {
-                review_texto.placeholder =
-                    "Adicione o jogo como Jogando ou Concluído para avaliar.";
-            } else {
-                review_texto.placeholder =
-                    "O que você achou desse jogo?";
-            }
+            review_texto.placeholder = bloqueado
+                ? "Adicione o jogo como Jogando ou Concluído para avaliar."
+                : "O que você achou desse jogo?";
         }
 
         function selecionarEstrela(valor) {
             notaSelecionada = valor;
+
             document.querySelectorAll(".star-btn").forEach(btn => {
                 const v = parseInt(btn.dataset.valor);
                 btn.textContent = v <= valor ? "★" : "☆";
@@ -226,18 +214,22 @@
         }
 
         function aplicarStatusVisual(status) {
+
             document.querySelectorAll(".btn-status").forEach(btn => {
                 btn.classList.remove("ativo-wishlist", "ativo-jogando", "ativo-concluido");
             });
 
-            if (status == null) {
+            if (!status) {
+                statusAtual = null;
                 atualizarEstadoReview();
                 return;
             }
 
             statusAtual = status;
-            document.getElementById(`btn-${status}`).classList.add(`ativo-${status}`);
-            console.log(status)
+
+            const el = document.getElementById(`btn-${status}`);
+            if (el) el.classList.add(`ativo-${status}`);
+
             atualizarEstadoReview();
         }
 
@@ -245,9 +237,8 @@
 
             if (statusAtual === status) {
                 aplicarStatusVisual(null);
-                atualizarEstadoReview();
-                await salvarStatus("removido");
 
+                await salvarStatus("removido");
                 return;
             }
 
@@ -257,39 +248,37 @@
 
         function converterStatus(numero) {
 
-            if (numero == 0) {
-                return "wishlist";
-            }
-            else if (numero == 1) {
-                return "jogando";
-            }
-            else if (numero == 2) {
-                return "concluido";
-            }
+            if (numero == 0) return "wishlist";
+            if (numero == 1) return "jogando";
+            if (numero == 2) return "concluido";
 
             return null;
         }
 
         async function salvarStatus(status) {
-            const resposta = await fetch(`/avaliacoes/adicionar`, {
+
+            await fetch(`/avaliacoes/adicionar`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.TOKEN}`
                 },
                 body: JSON.stringify({
-                    usuario: sessionStorage.ID_USUARIO,
-                    jogo: jogoUnico,
-                    status: status,
-                }),
-            })
+                    jogo: jogoUnico.id,
+                    status: status
+                })
+            });
         }
 
         async function publicarReview() {
-            var texto = review_texto.value.trim();
+
+            const texto = review_texto.value.trim();
+
             if (!notaSelecionada) {
                 return miniMensagem("Selecione uma nota antes de publicar.");
             }
-            if (statusAtual == null) {
+
+            if (!statusAtual) {
                 return miniMensagem("Selecione um status.");
             }
 
@@ -297,17 +286,17 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.TOKEN}`
                 },
                 body: JSON.stringify({
-                    usuario: sessionStorage.ID_USUARIO,
                     jogo: jogoUnico.id,
                     nota: notaSelecionada,
                     review: texto
                 })
             });
+
             if (resposta.ok) {
                 miniMensagem("Review publicada!");
-
                 carregarNotaMedia();
                 reviewComunidade();
             } else {
@@ -316,13 +305,14 @@
         }
 
         async function reviewComunidade() {
+
             const resposta = await fetch(`/avaliacoes/reviewComunidade/${id}`);
+
             if (!resposta.ok) {
                 reviews_lista.innerHTML = `
-            <div class="community-empty">
-                Seja o primeiro a avaliar este jogo
-            </div>
-        `;
+                <div class="community-empty">
+                    Seja o primeiro a avaliar este jogo
+                </div>`;
                 return;
             }
 
@@ -330,36 +320,34 @@
 
             if (!reviews || reviews.length === 0) {
                 reviews_lista.innerHTML = `
-            <div class="community-empty">
-                Seja o primeiro a avaliar este jogo
-            </div>`;
+                <div class="community-empty">
+                    Seja o primeiro a avaliar este jogo
+                </div>`;
                 return;
             }
 
-
-            reviews_lista.innerHTML = reviews.map(review => {
-                return `
+            reviews_lista.innerHTML = reviews.map(review => `
             <div class="community-review-card">
                 <div class="community-review-top">
                     <span class="community-review-user">
-                    <a href="perfil.html?id=${review.id_usuario}">
-                     @${review.username}</a></span>
+                        <a href="perfil.html?id=${review.id_usuario}">
+                            @${review.username}
+                        </a>
+                    </span>
                     <span class="community-review-nota">★ ${review.nota}</span>
                 </div>
                 <p class="community-review-text">
                     ${review.review}
                 </p>
-            </div>`;
-            }).join('');
+            </div>
+        `).join('');
         }
 
-
-
+        validarToken();
         plotarNavbar();
         validarSessaoPerfil();
         buscarInfos();
         carregarNotaMedia();
-        atualizarEstadoReview();
         reviewComunidade();
     </script>
 

@@ -1,4 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
+const jwt = require("jsonwebtoken");
 
 function autenticar(req, res) {
     var email = req.body.emailServer;
@@ -17,8 +18,27 @@ function autenticar(req, res) {
                     console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
 
                     if (resultadoAutenticar.length == 1) {
-                        console.log(resultadoAutenticar);
-                        res.json(resultadoAutenticar[0]);
+                        const usuario = resultadoAutenticar[0];
+
+                        const token = jwt.sign(
+                            {
+                                id: usuario.id_usuario,
+                                username: usuario.username,
+                                email: usuario.email
+                            },
+                            process.env.JWT_SECRET,
+                            { expiresIn: "2h" }
+                        );
+
+                        res.json({
+                            token,
+                            usuario: {
+                                id: usuario.id_usuario,
+                                username: usuario.username,
+                                email: usuario.email
+                            }
+                        });
+
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
                     } else {
@@ -70,25 +90,25 @@ function cadastrar(req, res) {
     }
 }
 
-async function carregarDadosUsuario(req, res){
-    try{
+async function carregarDadosUsuario(req, res) {
+    try {
         const usuario = req.params.idUsuario;
         const dadosUsuario = await usuarioModel.buscarDadosPerfil(usuario);
 
         return res.status(200).json(dadosUsuario[0]);
-    }catch (error) {
+    } catch (error) {
         console.log("Erro no controller:", error);
 
         return res.status(500).json({
             erro: "Erro buscar perfil do usuario"
         });
     }
-    
+
 }
 
 async function editarDescricao(req, res) {
     try {
-        const idUsuario = req.params.idUsuario;
+        const idUsuario = req.user.id;
         const aboutme = req.body.aboutme;
 
         if (!aboutme) {

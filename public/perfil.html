@@ -42,7 +42,7 @@
                     <textarea class="desc-editor" id="desc_editor" maxlength="200"></textarea>
                 </div>
             </div>
-            <button class="btn-editar" onclick="editarDesc()">✏ Editar perfil</button>
+            <button class="btn-editar" id="btn-editar" onclick="editarDesc()"> Editar perfil</button>
         </div>
 
         <div class="home-main">
@@ -166,13 +166,17 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
+        validarToken();
         plotarNavbar();
         validarSessaoPerfil();
 
-        const idPerfil = new URLSearchParams(window.location.search).get("id")
-            || sessionStorage.ID_USUARIO;
+        const btn_editar = document.getElementById("btn-editar");
 
-        
+        const idPerfil = new URLSearchParams(window.location.search).get("id");
+
+        if(Number(idPerfil) !== Number(sessionStorage.ID_USUARIO)){
+            btn_editar.style.display = "none";
+        }
 
         async function carregarPerfil() {
             const res = await fetch(`/usuarios/perfil/${idPerfil}`);
@@ -214,7 +218,7 @@
             textarea.style.display = "none";
             p.style.display = "block";
 
-            await fetch(`/usuarios/perfil/editarDesc/${idPerfil}`, {
+            await fetch(`/usuarios/perfil/editarDesc`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ aboutme: texto })

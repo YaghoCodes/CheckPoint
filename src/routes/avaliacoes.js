@@ -3,15 +3,17 @@ var router = express.Router();
 
 var avaliacaoController = require('../controllers/avaliacaoController');
 
-router.post('/adicionar', function (req, res) {
+const auth = require("../autorizacao/auth");
+
+router.post('/adicionar', auth, function (req, res) {
     avaliacaoController.atualizarStatus(req, res);
 });
 
-router.post('/review', function (req, res) {
+router.post('/review', auth, function (req, res) {
     avaliacaoController.fazerReview(req, res);
 });
 
-router.get('/usuario-jogo/:idUsuario/:idJogo', function (req, res) {
+router.get('/usuario-jogo/:idJogo', auth, function (req, res) {
     avaliacaoController.buscarRelacaoUsuario(req, res);
 });
 

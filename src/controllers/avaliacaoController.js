@@ -5,7 +5,7 @@ var plataformaModel = require('../models/plataformaModel');
 async function atualizarStatus(req, res) {
 
     try {
-        const usuario = req.body.usuario;
+        const usuario = req.user.id;
         const jogo = req.body.jogo;
         const status = req.body.status;
 
@@ -52,7 +52,7 @@ async function atualizarStatus(req, res) {
 
 async function fazerReview(req, res) {
     try {
-        const usuario = req.body.usuario;
+        const usuario = req.user.id;
         const jogo = req.body.jogo;
         const nota = req.body.nota;
         const review = req.body.review;
@@ -82,7 +82,7 @@ async function fazerReview(req, res) {
 async function buscarRelacaoUsuario(req, res) {
 
     try {
-        const usuario = req.params.idUsuario;
+        const usuario = req.user.id;
         const jogo = req.params.idJogo;
         console.log("entrei no Controller pra buscar relaçao de jogador e jogo");
         const jogoExiste = await jogosModel.buscarPorId(jogo);
