@@ -18,12 +18,20 @@
                 <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
-            <span id="colocarBotaoPerfil">
-            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
-                <div class="profile-avatar" id="c_usuario">U</div>
-                <span class="profile-name" id="n_usuario">username</span>
-            </a>
-            </span>
+            <div class="perfil-area">
+
+                <span id="colocarBotaoPerfil">
+                    <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                        <div class="profile-avatar" id="c_usuario">U</div>
+                        <span class="profile-name" id="n_usuario">username</span>
+                    </a>
+                </span>
+
+                <button class="logout-btn" onclick="deslogar()">
+                    Sair
+                </button>
+
+            </div>
         </div>
     </header>
 
@@ -166,15 +174,12 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
-        validarToken();
-        plotarNavbar();
-        validarSessaoPerfil();
 
+        const descarregarToken = JSON.parse(atob(sessionStorage.TOKEN.split(".")[1]));
         const btn_editar = document.getElementById("btn-editar");
 
-        const idPerfil = new URLSearchParams(window.location.search).get("id");
-
-        if(Number(idPerfil) !== Number(sessionStorage.ID_USUARIO)){
+        const idPerfil = new URLSearchParams(window.location.search).get("id") || Number(descarregarToken.id);
+        if (Number(idPerfil) !== Number(descarregarToken.id)) {
             btn_editar.style.display = "none";
         }
 
@@ -186,7 +191,7 @@
             desc_usuario.innerHTML = dados.aboutme;
             email_usuario.innerHTML = dados.email;
             date_usuario.innerHTML = `Membro desde ${dados.criado}`;
-            profile_avatar.innerHTML = dados.username[0].toUpperCase() + dados.username[1];
+            profile_avatar.innerHTML = dados.username.slice(0, 2).toUpperCase();  
         }
 
 
@@ -220,11 +225,17 @@
 
             await fetch(`/usuarios/perfil/editarDesc`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.TOKEN}`
+                },
                 body: JSON.stringify({ aboutme: texto })
             });
         }
 
+        validarToken();
+        plotarNavbar();
+        validarSessaoPerfil();
         carregarPerfil();
     </script>
 </body>

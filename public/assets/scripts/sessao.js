@@ -1,7 +1,8 @@
 function plotarNavbar() {
     var colocarBotaoPerfil = document.getElementById("colocarBotaoPerfil");
+    const descarregar = JSON.parse(atob(sessionStorage.TOKEN.split(".")[1]));
 
-    colocarBotaoPerfil.innerHTML = ` <a class="profile-btn" aria-label="Meu perfil" href="perfil.html?id=${sessionStorage.ID_USUARIO}">
+    colocarBotaoPerfil.innerHTML = ` <a class="profile-btn" aria-label="Meu perfil" href="perfil.html?id=${descarregar.id}">
                 <div class="profile-avatar" id="c_usuario">U</div>
                 <span class="profile-name" id="n_usuario">username</span>
             </a>`
@@ -98,4 +99,11 @@ function validarToken() {
         sessionStorage.clear();
         window.location = "index.html";
     }
+}
+
+function deslogar() {
+
+    sessionStorage.clear();
+
+    window.location = "index.html";
 }

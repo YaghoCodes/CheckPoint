@@ -14,20 +14,28 @@
 
 <body>
 
-    <header>
+   <header>
         <div class="header-inner">
             <h1><span class="texto-azul">Check</span>Point</h1>
             <ul class="icones_nav">
                 <li><a href="home.html">Home</a></li>
-                <li><a href="catalogo.html" class="active">Catálogo</a></li>
+                <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
-            <span id="colocarBotaoPerfil">
-            <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
-                <div class="profile-avatar" id="c_usuario">U</div>
-                <span class="profile-name" id="n_usuario">username</span>
-            </a>
-            </span>
+            <div class="perfil-area">
+
+                <span id="colocarBotaoPerfil">
+                    <a class="profile-btn" aria-label="Meu perfil" href="perfil.html">
+                        <div class="profile-avatar" id="c_usuario">U</div>
+                        <span class="profile-name" id="n_usuario">username</span>
+                    </a>
+                </span>
+
+                <button class="logout-btn" onclick="deslogar()">
+                    Sair
+                </button>
+
+            </div>
         </div>
     </header>
 
