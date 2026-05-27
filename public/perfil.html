@@ -233,6 +233,12 @@
             });
         }
 
+        async function plotarStatus(){
+            const stats = await fetch(`/usuarios/stats/${idPerfil}`)
+
+            console.log(stats)
+        }
+
         validarToken();
         plotarNavbar();
         validarSessaoPerfil();

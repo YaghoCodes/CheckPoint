@@ -39,8 +39,6 @@ CREATE TABLE jogo(
 
 desc jogo;
 
-ALTER TABLE jogo
-CHANGE COLUMN plataforma fkPlataforma INT NULL;
 
 CREATE TABLE avaliacao (
   fk_usuario INT NOT NULL,
@@ -57,23 +55,5 @@ CREATE TABLE avaliacao (
 
 select * from avaliacao;
 
+select count(*) from avaliacao where fk_usuario = 1 and status = 1;
 
-ALTER TABLE avaliacao
-ADD COLUMN dataReview DATETIME DEFAULT CURRENT_TIMESTAMP;
-
-alter table avaliacao
-drop column fkPlataforma;
-
-update avaliacao
-set status = 1
-where fk_usuario = 1
-and fk_jogo = 3328;
-
-ALTER TABLE jogo
-MODIFY COLUMN description TEXT NOT NULL;
-
-ALTER TABLE avaliacao
-MODIFY COLUMN review TEXT;
-
-select categoria from jogo
-group by categoria;

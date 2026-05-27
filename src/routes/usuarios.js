@@ -15,11 +15,15 @@ router.post("/autenticar", function (req, res) {
 });
 
 router.get("/perfil/:idUsuario", function (req, res) {
-    usuarioController.carregarDadosUsuario(req, res);
+    usuarioController.carregarDadosPerfil(req, res);
 });
 
 router.put("/perfil/editarDesc", auth, function (req, res) {
     usuarioController.editarDescricao(req, res);
+});
+
+router.get("/stats/:idUsuario", function (req, res) {
+    usuarioController.carregarStatsPerfil(req, res);
 });
 
 module.exports = router;

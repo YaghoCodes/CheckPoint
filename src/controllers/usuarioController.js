@@ -90,7 +90,7 @@ function cadastrar(req, res) {
     }
 }
 
-async function carregarDadosUsuario(req, res) {
+async function carregarDadosPerfil(req, res) {
     try {
         const usuario = req.params.idUsuario;
         const dadosUsuario = await usuarioModel.buscarDadosPerfil(usuario);
@@ -129,9 +129,31 @@ async function editarDescricao(req, res) {
         });
     }
 }
+
+async function carregarStatsPerfil(req, res) {
+    try {
+        const usuario = req.params.idUsuario;
+        const statJogados = await usuarioModel.buscarStatJogados(usuario);
+        const statReviews = await usuarioModel.buscarStatReviews(usuario);
+        const statWishlist = await usuarioModel.buscarStatWishlist(usuario);
+        const statTW = await usuarioModel.buscarStatTW(usuario);
+        const statGenero = await usuarioModel.buscarStatGenero(usuario); 
+        const statPlataforma = await usuarioModel.buscarStatPlataforma(usuario);
+
+
+        return res.status(200).json(dadosUsuario[0]);
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar perfil do usuario"
+        });
+    }
+
+}
 module.exports = {
     autenticar,
     cadastrar,
-    carregarDadosUsuario,
+    carregarDadosPerfil,
     editarDescricao
 }
