@@ -137,16 +137,23 @@ async function carregarStatsPerfil(req, res) {
         const statReviews = await usuarioModel.buscarStatReviews(usuario);
         const statWishlist = await usuarioModel.buscarStatWishlist(usuario);
         const statTW = await usuarioModel.buscarStatTW(usuario);
-        const statGenero = await usuarioModel.buscarStatGenero(usuario); 
+        const statGenero = await usuarioModel.buscarStatGenero(usuario);
         const statPlataforma = await usuarioModel.buscarStatPlataforma(usuario);
 
 
-        return res.status(200).json(dadosUsuario[0]);
+        return res.status(200).json({
+            jogados: statJogados[0].jogados,
+            reviews: statReviews[0].reviews,
+            wishlist: statWishlist[0].wishlist,
+            estaSemana: statTW[0].estaSemana,
+            genero: statGenero[0].categoria,
+            plataforma: statPlataforma[0].nome
+        });
     } catch (error) {
         console.log("Erro no controller:", error);
 
         return res.status(500).json({
-            erro: "Erro buscar perfil do usuario"
+            erro: "Erro buscar stats perfil do usuario"
         });
     }
 
@@ -155,5 +162,6 @@ module.exports = {
     autenticar,
     cadastrar,
     carregarDadosPerfil,
-    editarDescricao
+    editarDescricao,
+    carregarStatsPerfil
 }

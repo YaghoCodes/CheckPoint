@@ -57,3 +57,30 @@ select * from avaliacao;
 
 select count(*) from avaliacao where fk_usuario = 1 and status = 1;
 
+select count(*) from avaliacao where fk_usuario = 1 
+and dataReview > current_date() - INTERVAL 7 DAY
+and status = 2;
+
+SELECT j.categoria
+from jogo j
+join avaliacao a
+	ON j.id_jogo = a.fk_jogo
+WHERE a.fk_usuario = 2
+GROUP BY j.categoria
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+select * from plataforma;
+
+SELECT p.nome
+FROM avaliacao a
+JOIN jogo j 
+    ON j.id_jogo = a.fk_jogo
+JOIN plataforma p 
+    ON p.idPlataforma = j.fkPlataforma
+WHERE a.fk_usuario = 1
+GROUP BY p.idPlataforma, p.nome
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+select current_date() - 7;

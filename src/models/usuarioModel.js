@@ -44,62 +44,73 @@ async function editarDescricao(usuario, aboutme) {
 }
 
 async function buscarStatJogados(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuari, jogando");
     var instrucaoSql = `
-                SELECT count()
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT count(*) jogados FROM avaliacao WHERE fk_usuario = ${usuario} AND status = 1;    
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, jogando: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 async function buscarStatReviews(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuario, Reviews");
     var instrucaoSql = `
-                SELECT username, email, aboutme, criado
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT count(*) reviews FROM avaliacao WHERE fk_usuario = ${usuario} AND review IS NOT NULL;    
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, Reviews: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 async function buscarStatWishlist(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuario, Wishlist");
     var instrucaoSql = `
-                SELECT username, email, aboutme, criado
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT count(*) wishlist FROM avaliacao WHERE fk_usuario = ${usuario} AND status = 0;       
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, Wishlist: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 async function buscarStatTW(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuario, this week");
     var instrucaoSql = `
-                SELECT username, email, aboutme, criado
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT count(*) estaSemana FROM avaliacao WHERE fk_usuario = ${usuario} 
+                AND dataReview > current_date() - INTERVAL 7 DAY
+                AND status = 2;   
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, this week: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 async function buscarStatGenero(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuario, genero");
     var instrucaoSql = `
-                SELECT username, email, aboutme, criado
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT j.categoria
+                from jogo j
+                join avaliacao a
+	                ON j.id_jogo = a.fk_jogo
+                WHERE a.fk_usuario = ${usuario}
+                GROUP BY j.categoria
+                ORDER BY COUNT(*) DESC
+                LIMIT 1;
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, genero: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 async function buscarStatPlataforma(usuario) {
-    onsole.log("Cheguei no model de buscar as informações do usuario");
+    console.log("Cheguei no model de buscar as informações do usuario, plataforma");
     var instrucaoSql = `
-                SELECT username, email, aboutme, criado
-                FROM usuario WHERE id_usuario = ${usuario};    
+                SELECT p.nome
+                FROM avaliacao a
+                JOIN jogo j 
+                    ON j.id_jogo = a.fk_jogo
+                JOIN plataforma p 
+                    ON p.idPlataforma = j.fkPlataforma
+                WHERE a.fk_usuario = ${usuario}
+                GROUP BY p.idPlataforma, p.nome
+                ORDER BY COUNT(*) DESC LIMIT 1;
                 `;
-    console.log("Executando a instrução SQL pra buscar as informações do usuario: \n" + instrucaoSql);
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, plataforma: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 

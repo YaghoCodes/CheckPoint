@@ -149,22 +149,22 @@
                     <h1>Status Rápido</h1>
                     <div class="row-stats">
                         <div class="box-stats">
-                            <h1>22</h1>
-                            <p>Jogados</p>
+                            <h1 id="jogados_stat">22</h1>
+                            <p> Jogos Concluidos</p>
                         </div>
                         <div class="box-stats">
-                            <h1>55</h1>
+                            <h1 id="review_stat">55</h1>
                             <p>Reviews</p>
                         </div>
                     </div>
                     <div class="row-stats">
                         <div class="box-stats">
-                            <h1>23</h1>
+                            <h1 id="wishlist_stat">23</h1>
                             <p>Na Lista</p>
                         </div>
                         <div class="box-stats">
-                            <h1>1</h1>
-                            <p>Esta Semana</p>
+                            <h1 id="semana_stat">1</h1>
+                            <p>Finalizados (7d)</p>
                         </div>
                     </div>
                 </div>
@@ -234,11 +234,13 @@
         }
 
         async function plotarStatus(){
-            const stats = await fetch(`/usuarios/stats/${idPerfil}`)
-
+            const resultado = await fetch(`/usuarios/stats/${idPerfil}`)
+            const stats = await resultado.json();
             console.log(stats)
-        }
 
+
+        }
+        plotarStatus();
         validarToken();
         plotarNavbar();
         validarSessaoPerfil();
