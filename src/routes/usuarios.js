@@ -26,4 +26,12 @@ router.get("/stats/:idUsuario", function (req, res) {
     usuarioController.carregarStatsPerfil(req, res);
 });
 
+router.get("/jogo/:idUsuario", function (req, res) {
+    usuarioController.carregarJogoPerfil(req, res);
+});
+
+router.get("/wishlist/:idUsuario", function (req, res) {
+    usuarioController.carregarWishlist(req, res);
+});
+
 module.exports = router;

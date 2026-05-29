@@ -156,10 +156,48 @@ async function buscarReviews(req, res) {
     }
 }
 
+async function buscarReviewsPerfil(req, res) {
+    try {
+        const perfil = req.params.idPerfil;
+        console.log("entrei no Controller pra buscar Reviews da Perfil");
+
+        const reviewsPerfil = await avaliacaoModel.buscarReviewsPerfil(perfil);
+
+        return res.status(200).json(reviewsPerfil);
+
+
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar reviews do perfil"
+        });
+    }
+}
+
+async function buscarReviewComunidade(req, res) {
+    try {
+        console.log("entrei no Controller pra buscar Reviews da comunidade da home");
+
+        const reviewsPerfil = await avaliacaoModel.buscarReviewsComunidade();
+
+        return res.status(200).json(reviewsPerfil);
+
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar reviews da comunidade  da home"
+        });
+    }
+}
+
 module.exports = {
     atualizarStatus,
     fazerReview,
     buscarRelacaoUsuario,
     buscarMedia,
-    buscarReviews
+    buscarReviews,
+    buscarReviewsPerfil,
+    buscarReviewComunidade
 };

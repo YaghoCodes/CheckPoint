@@ -142,12 +142,12 @@ async function carregarStatsPerfil(req, res) {
 
 
         return res.status(200).json({
-            jogados: statJogados[0].jogados,
-            reviews: statReviews[0].reviews,
-            wishlist: statWishlist[0].wishlist,
-            estaSemana: statTW[0].estaSemana,
-            genero: statGenero[0].categoria,
-            plataforma: statPlataforma[0].nome
+            jogados: statJogados[0]?.jogados || 0,
+            reviews: statReviews[0]?.reviews || 0,
+            wishlist: statWishlist[0]?.wishlist || 0,
+            estaSemana: statTW[0]?.estaSemana || 0,
+            genero: statGenero[0]?.categoria || "Nenhum jogo com genero avaliado",
+            plataforma: statPlataforma[0]?.nome || "Nenhum jogo com plataforma avaliada"
         });
     } catch (error) {
         console.log("Erro no controller:", error);
@@ -158,10 +158,63 @@ async function carregarStatsPerfil(req, res) {
     }
 
 }
+
+async function carregarJogoPerfil(req, res) {
+    try {
+        const usuario = req.params.idUsuario;
+        const jogoPerfil = await usuarioModel.buscarJogoPerfil(usuario);
+
+        return res.status(200).json({
+            idJogo: jogoPerfil[0].id_jogo,
+            nomeJogo: jogoPerfil[0].nome,
+            categoria: [jogoPerfil[0].categoria ? jogoPerfil[0].categoria : "Sem Categoria",
+            jogoPerfil[0].categoria2 ? jogoPerfil[0].categoria2 : null],
+            imagem: jogoPerfil[0].imagem,
+            dias: jogoPerfil[0].dias
+            
+        });
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar jogo perfil do usuario"
+        });
+    }
+}
+
+async function carregarWishlist(req, res) {
+    try {
+        console.log("entrei no controller de WISHLIST");
+
+        const usuario = req.params.idUsuario;
+
+        const wishlist = await usuarioModel.buscarWishlist(usuario);
+
+        const jogos = wishlist.map(jogo => ({
+            idJogo: jogo.id_jogo,
+            nomeJogo: jogo.nome,
+            categoria: [
+                jogo.categoria ? jogo.categoria : "Sem Categoria",
+                jogo.categoria2 ? jogo.categoria2 : null
+            ].filter(Boolean)
+        }));
+
+        return res.status(200).json(jogos);
+
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar wishlist do usuario"
+        });
+    }
+}
 module.exports = {
     autenticar,
     cadastrar,
     carregarDadosPerfil,
     editarDescricao,
-    carregarStatsPerfil
+    carregarStatsPerfil,
+    carregarJogoPerfil,
+    carregarWishlist
 }

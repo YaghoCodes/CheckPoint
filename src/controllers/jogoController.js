@@ -134,7 +134,7 @@ async function buscarId(req, res) {
                     data.genres[0]?.name,
                     data.genres[1]?.name
                 ],
-                lancamento: data.released.slice(0, 4),
+                lancamento: data.released?.slice(0, 4) || null,
                 dev: tratandoDev(data.developers),
                 desc: tratandoDesc(data.description_raw),
                 plat: tratandoPlataforma(data.platforms)

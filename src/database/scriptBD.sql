@@ -28,7 +28,7 @@ CREATE TABLE jogo(
   categoria VARCHAR(20) NOT NULL,
   categoria2 VARCHAR(20) NULL,
   description TEXT NOT NULL,
-  lancamento YEAR NOT NULL,
+  lancamento YEAR NULL,
   developer VARCHAR(100) NOT NULL,
   fkPlataforma int null,
   imagem VARCHAR(255) null,
@@ -36,6 +36,8 @@ CREATE TABLE jogo(
   FOREIGN KEY (fkPlataforma)
   REFERENCES plataforma(idPlataforma)
 );
+
+
 
 desc jogo;
 
@@ -82,5 +84,10 @@ WHERE a.fk_usuario = 1
 GROUP BY p.idPlataforma, p.nome
 ORDER BY COUNT(*) DESC
 LIMIT 1;
+
+SELECT j.id_jogo, j.nome, j.categoria,
+j.categoria2, j.imagem, TIMESTAMPDIFF(DAY, a.dataReview, NOW()) AS dias
+FROM jogo j JOIN avaliacao a ON j.id_jogo = a.fk_jogo
+WHERE a.fk_usuario = 1 and a.status = 1 ORDER BY a.dataReview DESC;
 
 select current_date() - 7;

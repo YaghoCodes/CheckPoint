@@ -89,11 +89,40 @@ async function buscarReviews(jogo) {
     return database.executar(instrucaoSql);
 }
 
+async function buscarReviewsPerfil(Perfil) {
+    console.log("Cheguei no model de buscar as ultimas reviews do Perfil");
+    var instrucaoSql = `
+            SELECT j.nome, a.review, a.nota, j.id_jogo
+            FROM jogo j JOIN avaliacao a 
+            ON j.id_jogo = a.fk_jogo AND a.fk_usuario = ${Perfil}
+            AND review IS NOT NULL 
+            ORDER BY a.dataReview DESC LIMIT  3;    
+            `;
+    console.log("Executando a instrução SQL pra buscar as ultimas reviews do Perfil: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+async function buscarReviewsComunidade() {
+    console.log("Cheguei no model de buscar as ultimas reviews da comunidade");
+    var instrucaoSql = `
+            SELECT j.nome, a.review, a.nota, j.id_jogo, u.username, u.id_usuario
+            FROM jogo j JOIN avaliacao a 
+            ON j.id_jogo = a.fk_jogo
+            JOIN usuario u on a.fk_usuario = u.id_usuario
+            AND review IS NOT NULL 
+            ORDER BY a.dataReview DESC LIMIT  3;    
+            `;
+    console.log("Executando a instrução SQL pra buscar as ultimas reviews da comunidade: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     inserirAvaliacao,
     atualizarStatus,
     buscarAvaliacao,
     atualizarReview,
     calcularMedia,
-    buscarReviews
+    buscarReviews,
+    buscarReviewsPerfil,
+    buscarReviewsComunidade
 }

@@ -114,6 +114,31 @@ async function buscarStatPlataforma(usuario) {
     return database.executar(instrucaoSql);
 }
 
+async function buscarJogoPerfil(usuario) {
+    console.log("Cheguei no model de buscar as informações do usuario, jogo");
+    var instrucaoSql = `
+                SELECT j.id_jogo, j.nome, j.categoria,
+                j.categoria2, j.imagem, TIMESTAMPDIFF(DAY, a.dataReview, NOW()) AS dias
+                FROM jogo j JOIN avaliacao a ON j.id_jogo = a.fk_jogo
+                WHERE a.fk_usuario = ${usuario} and a.status = 1 ORDER BY a.dataReview DESC LIMIT 1;
+                `;
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, jogo: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+async function buscarWishlist(usuario) {
+    console.log("Cheguei no model de buscar as informações do usuario, wishlist");
+    var instrucaoSql = `
+                SELECT j.id_jogo, j.nome, j.categoria,
+                j.categoria2 FROM jogo j JOIN avaliacao a ON j.id_jogo = a.fk_jogo
+                WHERE a.fk_usuario = ${usuario} and a.status = 0 ORDER BY a.dataReview LIMIT 5;
+                `;
+    console.log("Executando a instrução SQL pra buscar as informações do usuario, wishlist: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+
+
 module.exports = {
     autenticar,
     cadastrar,
@@ -124,5 +149,7 @@ module.exports = {
     buscarStatWishlist,
     buscarStatTW,
     buscarStatGenero,
-    buscarStatPlataforma
+    buscarStatPlataforma,
+    buscarJogoPerfil,
+    buscarWishlist
 };

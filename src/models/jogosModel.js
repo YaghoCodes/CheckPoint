@@ -18,7 +18,7 @@ async function InserirJogoBD(jogo) {
             lancamento, developer, fkPlataforma, imagem) 
             VALUES( ${jogo.id},'${jogo.nome}',${jogo.genero?.[0] ? `'${jogo.genero[0]}'` : null},
             ${jogo.genero?.[1] ? `'${jogo.genero[1]}'` : null},
-            '${(jogo.desc || '').replace(/'/g, "''")}','${jogo.lancamento}','${jogo.dev.nome}',${jogo.plat.id},'${jogo.imagem}')
+            '${(jogo.desc || '').replace(/'/g, "''")}',${jogo.lancamento ? `'${jogo.lancamento}'` : 'NULL'},'${jogo.dev.nome}',${jogo.plat.id},'${jogo.imagem}')
         `;
     console.log("Executando a instrução SQL pra inserir o jogo: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

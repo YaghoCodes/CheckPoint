@@ -57,13 +57,18 @@
             <div class="left-col">
                 <div class="playing-now">
                     <h1>Jogando agora</h1>
-                    <div class="playing-card">
-                        <div class="game-cover">COVER</div>
+                    <div class="playing-card" id="card_jogando">
+                        <div class="game-cover" id="game_cover">
+
+                        </div>
                         <div class="playing-info">
                             <h2 class="playing-name" id="jogandoNome">Hollow Knight: Silksong</h2>
-                            <p class="playing-meta">Adicionado há <span id="date-meta">2</span> dias · Metroidvania</p>
+                            <p class="playing-meta">Adicionado há <span id="jogadoHa">2</span> dias · <span
+                                    id="jogandoGenero1"></span> <span id="jogandoGenero2"></span></p>
                         </div>
-                        <a href="#" class="playing-btn">Ver jogo →</a>
+                        <span id="botao_verJogo">
+                            <a href="" class="playing-btn">Ver jogo →</a>
+                        </span>
                     </div>
                 </div>
 
@@ -82,52 +87,15 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="community-reviews">
+                
+                <div class="community-reviews" id="community_reviews">
                     <div class="community-reviews-header">
-                        <h1>Suas Últimas Reviews</h1>
+                        <h1>Últimas Reviews</h1>
                     </div>
-
+                    
                     <div class="review-card">
                         <div class="review-top">
                             <div class="review-user">
-                                <div class="review-avatar" id="comentario-icone1">MA</div>
-                                <div>
-                                    <h2 class="review-game">Celeste</h2>
-                                </div>
-                            </div>
-                            <span class="review-score">★ 5/5</span>
-                        </div>
-                        <p class="review-text">Uma das melhores experiências que já tive com um indie. A narrativa sobre
-                            saúde mental é tocante sem ser pesada demais.</p>
-                        <div class="review-bottom">
-                            <span class="review-time">há 1 hora</span>
-                            <span class="review-genre">Plataforma</span>
-                        </div>
-                    </div>
-
-                    <div class="review-card">
-                        <div class="review-top">
-                            <div class="review-user">
-                                <div class="review-avatar" id="comentario-icone2">RS</div>
-                                <div>
-                                    <h2 class="review-game">Hades II</h2>
-                                </div>
-                            </div>
-                            <span class="review-score">★ 4/5</span>
-                        </div>
-                        <p class="review-text">Ainda em early access mas já supera muita coisa completa no mercado. O
-                            combate é viciante como sempre.</p>
-                        <div class="review-bottom">
-                            <span class="review-time">há 3 horas</span>
-                            <span class="review-genre">Roguelike</span>
-                        </div>
-                    </div>
-
-                    <div class="review-card">
-                        <div class="review-top">
-                            <div class="review-user">
-                                <div class="review-avatar" id="comentario-icone3">LP</div>
                                 <div>
                                     <h2 class="review-game">Pentiment</h2>
                                 </div>
@@ -136,11 +104,8 @@
                         </div>
                         <p class="review-text">Arte única, narrativa densa e uma atmosfera que não existe em mais nenhum
                             jogo. Vale cada hora.</p>
-                        <div class="review-bottom">
-                            <span class="review-time">há 5 horas</span>
-                            <span class="review-genre">Narrativa</span>
                         </div>
-                    </div>
+                        
                 </div>
             </div>
 
@@ -191,7 +156,7 @@
             desc_usuario.innerHTML = dados.aboutme;
             email_usuario.innerHTML = dados.email;
             date_usuario.innerHTML = `Membro desde ${dados.criado}`;
-            profile_avatar.innerHTML = dados.username.slice(0, 2).toUpperCase();  
+            profile_avatar.innerHTML = dados.username.slice(0, 2).toUpperCase();
         }
 
 
@@ -233,18 +198,79 @@
             });
         }
 
-        async function plotarStatus(){
+        async function plotarStatus() {
             const resultado = await fetch(`/usuarios/stats/${idPerfil}`)
             const stats = await resultado.json();
             console.log(stats)
+            jogados_stat.innerHTML = stats.jogados
+            review_stat.innerHTML = stats.reviews
+            wishlist_stat.innerHTML = stats.wishlist
+            semana_stat.innerHTML = stats.estaSemana
+            genero_favorito.innerHTML = stats.genero
+            plataforma_preferida.innerHTML = stats.plataforma
+        }
 
+        async function plotarJogo() {
+            const resultado = await fetch(`/usuarios/jogo/${idPerfil}`)
+            if (!resultado.ok) {
+                card_jogando.innerHTML =
+                    `<div class="game-empty">
+                            Avalie algum jogo como Jogando para registrar!
+                        </div>`
+            }
+            else{
+                const stats = await resultado.json();
+                jogandoNome.innerHTML = stats.nomeJogo;
+                jogadoHa.innerHTML = stats.dias;
+                jogandoGenero1.innerHTML = stats.categoria[0] ? stats.categoria[0] : null;
+                jogandoGenero2.innerHTML = " " + stats.categoria[1] ? stats.categoria[1] : null;
+                game_cover.innerHTML = `<img src="${stats.imagem}" alt="capa do jogo">`;
+                botao_verJogo.innerHTML = `<a href="jogo.html?id=${stats.idJogo}" class="playing-btn">Ver jogo →</a>`
+            }
+        }
 
+        async function plotarReview(){
+            const resposta = await fetch(`/avaliacoes/reviewPerfil/${idPerfil}`);
+            if (!resposta.ok) {
+                if(Number(idPerfil) !== Number(descarregarToken.id)){
+                    community_reviews.innerHTML =
+                    `<div class="game-empty">
+                            Esse usuario ainda nao avaliou nenhum jogo
+                        </div>`
+                }else{
+                    community_reviews.innerHTML =
+                    `<div class="game-empty">
+                            Avalie algum jogo para registrar!
+                        </div>`
+                }  
+            }
+            else {
+                const reviews = await resposta.json();
+                console.log(reviews)
+                community_reviews.innerHTML = `<div class="community-reviews-header">
+                        <h1>Suas Últimas Reviews</h1>
+                    </div>`+ reviews.map(review => `
+                <div class="review-card">
+                        <div class="review-top">
+                            <div class="review-user">
+                                <div>
+                                    <h2 class="review-game"><a href="jogo.html?id=${review.id_jogo}">${review.nome}</a></h2>
+                                </div>
+                            </div>
+                            <span class="review-score">★ ${review.nota}/5</span>
+                        </div>
+                        <p class="review-text">${review.review}</p>
+                        </div>
+                `).join(``)
+            }
         }
         plotarStatus();
         validarToken();
         plotarNavbar();
         validarSessaoPerfil();
         carregarPerfil();
+        plotarJogo();
+        plotarReview()
     </script>
 </body>
 

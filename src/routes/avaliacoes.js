@@ -25,6 +25,13 @@ router.get('/reviewComunidade/:idJogo', function (req, res) {
     avaliacaoController.buscarReviews(req, res);
 });
 
+router.get('/reviewPerfil/:idPerfil', function (req, res) {
+    avaliacaoController.buscarReviewsPerfil(req, res);
+});
+
+router.get('/reviewComunidadeGeral', function (req, res) {
+    avaliacaoController.buscarReviewComunidade(req, res);
+});
 
 
 module.exports = router;

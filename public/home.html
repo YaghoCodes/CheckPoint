@@ -10,7 +10,7 @@
 </head>
 
 <body>
-   <header>
+    <header>
         <div class="header-inner">
             <h1><span class="texto-azul">Check</span>Point</h1>
             <ul class="icones_nav">
@@ -42,7 +42,7 @@
                 <p>Um resumo rápido pra você começar. Visite seu catálogo, dashboard ou perfil pra mais detalhes.</p>
             </div>
             <div class="hero-buttons">
-                <button id="catalogo"><a href="catalogo.html">Ver Catalogo</a></button>
+                <button><a href="catalogo.html">Ver Catalogo</a></button>
                 <button><a href="dashboard.html">Meu Dashboard</a></button>
                 <button><a href="perfil.html">Perfil</a></button>
             </div>
@@ -50,17 +50,22 @@
         <div class="home-main">
             <div class="left-col">
                 <div class="playing-now">
-                    <h1> Jogando agora</h1>
-                    <div class="playing-card">
-                        <div class="game-cover">COVER</div>
+                    <h1>Jogando agora</h1>
+                    <div class="playing-card" id="card_jogando">
+                        <div class="game-cover" id="game_cover">
+
+                        </div>
                         <div class="playing-info">
                             <h2 class="playing-name" id="jogandoNome">Hollow Knight: Silksong</h2>
-                            <p class="playing-meta">Adicionado há <span id="date-meta">2</span> dias · Metroidvania</p>
+                            <p class="playing-meta">Adicionado há <span id="jogadoHa">2</span> dias · <span
+                                    id="jogandoGenero1"></span> <span id="jogandoGenero2"></span></p>
                         </div>
-                        <a href="#" class="playing-btn">Ver jogo →</a>
+                        <span id="botao_verJogo">
+                            <a href="" class="playing-btn">Ver jogo →</a>
+                        </span>
                     </div>
                 </div>
-                <div class="community-reviews">
+                <div class="community-reviews" id="community_reviews">
                     <div class="community-reviews-header">
                         <h1> Ultimas Reviews da comunidade</h1>
                     </div>
@@ -124,8 +129,7 @@
                 </div>
             </div>
             <div class="right-col">
-                <div class="to-play">
-
+                <div class="to-play" id="to_play">
                     <div class="to-play-card">
                         <div class="to-play-header">
                             <h1>Na fila para jogar</h1>
@@ -136,25 +140,6 @@
                             </div>
                             <div class="to-play-genre">Aventura</div>
                         </div>
-                        <div class="to-play-box">
-                            <div class="to-play-header" id="tp-header2">
-                                Disco Elysium
-                            </div>
-                            <div class="to-play-genre">RPG</div>
-                        </div>
-                        <div class="to-play-box">
-                            <div class="to-play-header" id="tp-header3">
-                                Sea of Stars
-                            </div>
-                            <div class="to-play-genre">RPG</div>
-                        </div>
-                        <div class="to-play-box">
-                            <div class="to-play-header" id="tp-header4">
-                                Elden Ring
-                            </div>
-                            <div class="to-play-genre">Soulslike</div>
-                        </div>
-                        <div class="to-play-fulllist">ver lista completa</div>
                     </div>
                 </div>
             </div>
@@ -164,11 +149,90 @@
 
     <script src="assets/scripts/sessao.js"></script>
     <script>
+        const descarregarToken = JSON.parse(atob(sessionStorage.TOKEN.split(".")[1]));
+        const idPerfil = new URLSearchParams(window.location.search).get("id") || Number(descarregarToken.id);
+
+        async function plotarJogo() {
+            const resultado = await fetch(`/usuarios/jogo/${idPerfil}`)
+            if (!resultado.ok) {
+                card_jogando.innerHTML =
+                    `<div class="game-empty">
+                            Avalie algum jogo como Jogando para registrar!
+                        </div>`
+            }
+            else {
+                const stats = await resultado.json();
+                jogandoNome.innerHTML = stats.nomeJogo;
+                jogadoHa.innerHTML = stats.dias;
+                jogandoGenero1.innerHTML = stats.categoria[0] ? stats.categoria[0] : null;
+                jogandoGenero2.innerHTML = " " + stats.categoria[1] ? stats.categoria[1] : null;
+                game_cover.innerHTML = `<img src="${stats.imagem}" alt="capa do jogo">`;
+                botao_verJogo.innerHTML = `<a href="jogo.html?id=${stats.idJogo}" class="playing-btn">Ver jogo →</a>`
+            }
+        }
+
+        async function plotarReview() {
+            const resposta = await fetch(`/avaliacoes/reviewComunidadeGeral`);
+            if (!resposta.ok) {
+                console.log("deu erro ao buscar as reviews da comunidade")
+            }
+            else {
+                const reviews = await resposta.json();
+                community_reviews.innerHTML = `<div class="community-reviews-header">
+                        <h1>Últimas Reviews da Comunidade</h1>
+                    </div>`+ reviews.map(review => `
+                <div class="review-card">
+                        <div class="review-top">
+                           <div class="review-user">
+                                <div class="review-avatar">${review.username.slice(0, 2).toUpperCase()}</div>
+                                <div>
+                                    <p class="review-username"><a href="perfil.html?id=${review.id_usuario}">@${review.username}</a></p>
+                                    <h2 class="review-game"><a href="jogo.html?id=${review.id_jogo}">${review.nome}</a></h2>
+                                </div>
+                            </div>
+                            <span class="review-score">★ ${review.nota}/5</span>
+                        </div>
+                        <p class="review-text">${review.review}</p>
+                        </div>
+                `).join(``)
+            }
+        }
+        const ListaWishlist = document.getElementById("to_play");
+        async function plotarWishList() {
+            const resposta = await fetch(`/usuarios/wishlist/${idPerfil}`);
+            if (!resposta.ok) {
+                console.log("Erro ao buscar wishlist");
+                ListaWishlist.style.display = "none";
+                return;
+            }
+
+            const wishlist = await resposta.json();
+
+            if (wishlist.length === 0) {
+                ListaWishlist.style.display = "none";
+                return;
+            }
+            console.log(wishlist)
+            ListaWishlist.innerHTML = `<div class="to-play-card">
+                        <div class="to-play-header">
+                            <h1>Na fila para jogar</h1>
+                        </div>`+
+                wishlist.map(itemWishlist => `
+                        <div class="to-play-box">
+                            <div class="to-play-header" id="tp-header1">
+                                ${itemWishlist.nomeJogo}
+                            </div>
+                            <div class="to-play-genre">${itemWishlist.categoria.join(" - ") || "Sem categoria"}</div>
+                        </div>`).join(``) + `</div>`
+        }
+        
+
+        plotarJogo();
         validarToken();
         plotarNavbar();
         validarSessaoHome();
-
-
+        plotarReview();
+        plotarWishList();
     </script>
 </body>
 
