@@ -284,6 +284,7 @@ html, body {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
+    width: 100%;
 }
 
 .review-bottom {
