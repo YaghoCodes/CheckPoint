@@ -58,7 +58,7 @@ async function buscarGenerosGD(usuario) {
         SELECT categoria, COUNT(*) AS total
         FROM jogo
         JOIN avaliacao ON id_jogo = fk_jogo
-        WHERE fk_usuario = 12
+        WHERE fk_usuario = ${usuario}
         AND status IN (1,2)
         GROUP BY categoria
         ORDER BY total DESC;    
