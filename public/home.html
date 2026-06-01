@@ -14,7 +14,7 @@
         <div class="header-inner">
             <h1><span class="texto-azul">Check</span>Point</h1>
             <ul class="icones_nav">
-                <li><a href="home.html">Home</a></li>
+                <li><a href="home.html"  class="active">Home</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
                 <li><a href="dashboard.html">Dashboard</a></li>
             </ul>
@@ -220,7 +220,7 @@
                 wishlist.map(itemWishlist => `
                         <div class="to-play-box">
                             <div class="to-play-header" id="tp-header1">
-                                ${itemWishlist.nomeJogo}
+                                <a href="jogo.html?id=${itemWishlist.idJogo}">${itemWishlist.nomeJogo}</a>
                             </div>
                             <div class="to-play-genre">${itemWishlist.categoria.join(" - ") || "Sem categoria"}</div>
                         </div>`).join(``) + `</div>`

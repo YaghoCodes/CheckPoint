@@ -46,7 +46,7 @@ async function editarDescricao(usuario, aboutme) {
 async function buscarStatJogados(usuario) {
     console.log("Cheguei no model de buscar as informações do usuari, jogando");
     var instrucaoSql = `
-                SELECT count(*) jogados FROM avaliacao WHERE fk_usuario = ${usuario} AND status = 1;    
+                SELECT count(*) jogados FROM avaliacao WHERE fk_usuario = ${usuario} AND status = 2;    
                 `;
     console.log("Executando a instrução SQL pra buscar as informações do usuario, jogando: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

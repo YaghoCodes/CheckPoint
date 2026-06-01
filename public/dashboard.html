@@ -19,7 +19,7 @@
             <ul class="icones_nav">
                 <li><a href="home.html">Home</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
-                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="dashboard.html"  class="active">Dashboard</a></li>
             </ul>
             <div class="perfil-area">
 
@@ -48,19 +48,19 @@
             <div class="row-stats">
                 <div class="box-stats">
                     <h1 id="dash_jogados">42</h1>
-                    <p>Jogos jogados</p>
+                    <p>Jogos Concluidos</p>
                 </div>
                 <div class="box-stats">
-                    <h1 id="dash_reviews">18</h1>
+                    <h1 id="dash_nota">4.5</h1>
+                    <p>Nota média</p>
+                </div>
+                <div class="box-stats">
+                    <h1 id="dash_taxa">8</h1>
+                    <p>Taxa de conclusão</p>
+                </div>
+                <div class="box-stats">
+                    <h1 id="dash_Review">23</h1>
                     <p>Reviews escritas</p>
-                </div>
-                <div class="box-stats">
-                    <h1 id="dash_semana">8</h1>
-                    <p>Reviews esta semana</p>
-                </div>
-                <div class="box-stats">
-                    <h1 id="dash_lista">23</h1>
-                    <p>Na lista pra jogar</p>
                 </div>
             </div>
         </div>
@@ -93,88 +93,39 @@
     </div>
 
     <script src="assets/scripts/sessao.js"></script>
+    <script src="assets/scripts/dash.js"></script>
     <script>
-        console.log("antes da verificação")
+
+        const descarregarToken = JSON.parse(atob(sessionStorage.TOKEN.split(".")[1]));
+        const idUsuario = Number(descarregarToken.id);
+
+        async function plotarKpi(){
+            const resultado = await fetch(`/dashboard/kpi/${idUsuario}`)
+            const stats = await resultado.json();
+            dash_jogados.innerHTML = stats.jogados
+            dash_nota.innerHTML = stats.nota_media
+            dash_taxa.innerHTML = stats.TaxaConclusao + "%"
+            dash_Review.innerHTML = stats.reviews
+        }
+
+        async function graficoBarra(){
+            const resultado = await fetch(`/dashboard/graficoBarra/${idUsuario}`)
+            if (resultado.ok){
+                const dados = await resultado.json();
+                console.log(dados)
+                plotarGraficoBarra(dados.grafico, dados.totalReviews)
+            }
+        }
+
+        async function graficoDunut() {
+            const resultado = await fetch(`/dashboard`)
+        }
+
         validarToken();
-        console.log("depois da verificação")
         plotarNavbar();
         validarSessaoCatalogo();
-
-        const barCtx = document.getElementById("barChart").getContext("2d");
-        const barData = {
-            labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
-            values: [0, 1, 2, 1, 3, 0, 1]
-        };
-
-        document.getElementById("total-reviews-label").textContent =
-            `Total: ${barData.values.reduce((a, b) => a + b, 0)} reviews`;
-
-        new Chart(barCtx, {
-            type: "bar",
-            data: {
-                labels: barData.labels,
-                datasets: [{
-                    data: barData.values,
-                    backgroundColor: "rgba(74, 158, 219, 0.25)",
-                    borderColor: "rgba(74, 158, 219, 0.6)",
-                    borderWidth: 1,
-                    borderRadius: 4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: {
-                        ticks: { color: "rgba(255,255,255,0.3)", font: { size: 11 } },
-                        grid: { color: "rgba(255,255,255,0.05)" }
-                    },
-                    y: {
-                        ticks: { color: "rgba(255,255,255,0.3)", font: { size: 11 }, stepSize: 1 },
-                        grid: { color: "rgba(255,255,255,0.05)" },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        const donutCtx = document.getElementById("donutChart").getContext("2d");
-        const generos = [
-            { label: "RPG", value: 10, color: "#3b82f6" },
-            { label: "Indie", value: 8, color: "#6b7280" },
-            { label: "Soulslike", value: 7, color: "#60a5fa" },
-            { label: "Puzzle", value: 5, color: "#93c5fd" },
-            { label: "Outros", value: 12, color: "#374151" },
-        ];
-
-        new Chart(donutCtx, {
-            type: "doughnut",
-            data: {
-                labels: generos.map(g => g.label),
-                datasets: [{
-                    data: generos.map(g => g.value),
-                    backgroundColor: generos.map(g => g.color),
-                    borderColor: "#161b22",
-                    borderWidth: 2,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: "65%",
-                plugins: { legend: { display: false } }
-            }
-        });
-
-
-        const legend = document.getElementById("donut-legend");
-        legend.innerHTML = generos.map(g => `
-            <div class="legend-item">
-                <div class="legend-dot" style="background:${g.color}"></div>
-                ${g.label}
-            </div>
-        `).join("");
+        plotarKpi();
+        graficoBarra()
     </script>
 
 </body>
