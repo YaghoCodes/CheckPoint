@@ -11,5 +11,9 @@ router.get("/graficoBarra/:idUsuario", function (req, res) {
     dashboardController.buscarGB(req, res);
 });
 
+router.get("/graficoDonut/:idUsuario", function (req, res) {
+    dashboardController.buscarGD(req, res);
+});
+
 
 module.exports = router;

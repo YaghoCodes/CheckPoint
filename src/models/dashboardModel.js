@@ -52,11 +52,27 @@ async function buscarReviewsTotalGB(usuario) {
     return database.executar(instrucaoSql);
 }
 
+async function buscarGenerosGD(usuario) {
+    console.log("Cheguei no model de buscar os top generos do usuario")
+    var instrucaoSql = `
+        SELECT categoria, COUNT(*) AS total
+        FROM jogo
+        JOIN avaliacao ON id_jogo = fk_jogo
+        WHERE fk_usuario = 12
+        AND status IN (1,2)
+        GROUP BY categoria
+        ORDER BY total DESC;    
+        `;
+    console.log("Executando a instrução SQL para dados do os top generos do usuario : \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 
 
 module.exports = {
     buscarKpiNota,
     buscarTaxaConclusao,
     buscarReviewsGB,
-    buscarReviewsTotalGB
+    buscarReviewsTotalGB,
+    buscarGenerosGD
 }

@@ -31,6 +31,7 @@
         <p class="login-link" id="cadastrar-link">Ainda não tem conta? <a href="cadastro.html">Criar conta</a></p>
     </div>
     <script src="assets/scripts/script.js"></script>
+    <script src="assets/scripts/sessao.js"></script>
     <script>
         function MostrarSenha(inputId) {
             const input = document.getElementById(inputId);
@@ -92,6 +93,7 @@
                     console.log("Houve um erro ao tentar realizar o login!");
                     resposta.text().then(texto => {
                         console.error(texto);
+                        miniMensagem("Email ou senha Invalidos")
                     });
                 }
             }).catch(function (erro) {

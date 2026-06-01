@@ -53,7 +53,38 @@ async function buscarGB(req, res) {
     }
 }
 
+async function buscarGD(req, res) {
+    try {
+        const usuario = req.params.idUsuario;
+
+        const dados = await dashboardModel.buscarGenerosGD(usuario);
+
+        const top4 = dados.slice(0, 4);
+
+        const outros = dados
+            .slice(4)
+            .reduce((soma, genero) => soma + genero.total, 0);
+
+        if (outros > 0) {
+            top4.push({
+                categoria: "Outros",
+                total: outros
+            });
+        }
+
+        return res.status(200).json(top4);
+
+    } catch (error) {
+        console.log("Erro no controller:", error);
+
+        return res.status(500).json({
+            erro: "Erro buscar gráfico dashboard"
+        });
+    }
+}
+
 module.exports = {
     buscarKpis,
-    buscarGB
+    buscarGB,
+    buscarGD
 };

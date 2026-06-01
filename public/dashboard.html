@@ -13,13 +13,13 @@
 
 <body>
 
-   <header>
+    <header>
         <div class="header-inner">
             <h1><span class="texto-azul">Check</span>Point</h1>
             <ul class="icones_nav">
                 <li><a href="home.html">Home</a></li>
                 <li><a href="catalogo.html">Catálogo</a></li>
-                <li><a href="dashboard.html"  class="active">Dashboard</a></li>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
             </ul>
             <div class="perfil-area">
 
@@ -89,7 +89,7 @@
 
         </div>
 
-    
+
     </div>
 
     <script src="assets/scripts/sessao.js"></script>
@@ -99,7 +99,7 @@
         const descarregarToken = JSON.parse(atob(sessionStorage.TOKEN.split(".")[1]));
         const idUsuario = Number(descarregarToken.id);
 
-        async function plotarKpi(){
+        async function plotarKpi() {
             const resultado = await fetch(`/dashboard/kpi/${idUsuario}`)
             const stats = await resultado.json();
             dash_jogados.innerHTML = stats.jogados
@@ -108,24 +108,42 @@
             dash_Review.innerHTML = stats.reviews
         }
 
-        async function graficoBarra(){
+        async function graficoBarra() {
             const resultado = await fetch(`/dashboard/graficoBarra/${idUsuario}`)
-            if (resultado.ok){
+            if (resultado.ok) {
                 const dados = await resultado.json();
-                console.log(dados)
                 plotarGraficoBarra(dados.grafico, dados.totalReviews)
             }
         }
 
-        async function graficoDunut() {
-            const resultado = await fetch(`/dashboard`)
+        async function graficoDonut() {
+            const resultado = await fetch(`/dashboard/graficoDonut/${idUsuario}`)
+            if (resultado.ok) {
+                const dados = await resultado.json();
+
+                const cores = [
+                    "#3b82f6",
+                    "#6b7280", 
+                    "#60a5fa", 
+                    "#93c5fd", 
+                    "#374151"
+                ];
+
+                const generos = dados.map((genero, i) => ({
+                    categoria: genero.categoria,
+                    total: genero.total,
+                    cor: cores[i]
+                }));
+                plotarGraficoDonut(generos)
+            }
         }
 
         validarToken();
         plotarNavbar();
         validarSessaoCatalogo();
         plotarKpi();
-        graficoBarra()
+        graficoBarra();
+        graficoDonut();
     </script>
 
 </body>

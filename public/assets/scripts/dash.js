@@ -40,22 +40,18 @@ function plotarGraficoBarra(dados, total) {
         }
     });
 }
+
+function plotarGraficoDonut(generos){
 const donutCtx = document.getElementById("donutChart").getContext("2d");
-const generos = [
-    { label: "RPG", value: 10, color: "#3b82f6" },
-    { label: "Indie", value: 8, color: "#6b7280" },
-    { label: "Soulslike", value: 7, color: "#60a5fa" },
-    { label: "Puzzle", value: 5, color: "#93c5fd" },
-    { label: "Outros", value: 12, color: "#374151" },
-];
+
 
 new Chart(donutCtx, {
     type: "doughnut",
     data: {
-        labels: generos.map(g => g.label),
+        labels: generos.map(g => g.categoria),
         datasets: [{
-            data: generos.map(g => g.value),
-            backgroundColor: generos.map(g => g.color),
+            data: generos.map(g => g.total),
+            backgroundColor: generos.map(g => g.cor),
             borderColor: "#161b22"
         }]
     },
@@ -65,4 +61,4 @@ new Chart(donutCtx, {
         cutout: "65%",
     }
 });
-
+}
